@@ -1,22 +1,39 @@
 import random
 
 liste_nom = [
-    {"nom": "armoire", "genre": "f"},
-    {"nom": "clé", "genre": "f"},
-    {"nom": "porte", "genre": "f"},
-    {"nom": "sonette", "genre": "f"},
-    {"nom": "lavabo", "genre": "m"},
-    {"nom": "allumette", "genre": "f"},
-    {"nom": "anniversaire", "genre": "m"},
-    {"nom": "appétit", "genre": "m"},
-    {"nom": "beurre", "genre": "m"},
-    {"nom": "coquille", "genre": "f"},
-    {"nom": "crêpe", "genre": "f"},
-    {"nom": "marionnette", "genre": "f"},
-    {"nom": "marteau", "genre": "m"},
-    {"nom": "métal", "genre": "m"},
-    {"nom": "mètre", "genre": "m"},
+    {"nom": "rime", "genre": "m", "rime":"ime"},
+    {"nom": "crime", "genre": "m", "rime":"ime"},
+    {"nom": "prime", "genre": "f", "rime":"ime"},
+    {"nom": "déprime", "genre": "f", "rime":"ime"},
+    {"nom": "intérim", "genre": "m", "rime":"ime"},
+    {"nom": "gym", "genre": "m", "rime":"ime"},
+    {"nom": "lime", "genre": "f", "rime":"ime"},
+    {"nom": "cybercrime", "genre": "m", "rime":"ime"},
+    {"nom": "abime", "genre": "m", "rime":"ime"},
+    {"nom": "enzyme", "genre": "f", "rime":"ime"},
+    {"nom": "régime", "genre": "m", "rime":"ime"},
+    {"nom": "estime", "genre": "f", "rime":"ime"},
+    {"nom": "anonyme", "genre": "m", "rime":"ime"},
+    {"nom": "victime", "genre": "f", "rime":"ime"},
+    {"nom": "sublime", "genre": "m", "rime":"ime"},
+    {"nom": "synonyme", "genre": "m", "rime":"ime"},
+    {"nom": "acronyme", "genre": "f", "rime":"ime"},
+    {"nom": "laid", "genre": "m", "rime":"ait"},
+    {"nom": "plaie", "genre": "f", "rime":"ait"},
+    {"nom": "volet", "genre": "m", "rime":"ait"},
+    {"nom": "reflet", "genre": "m", "rime":"ait"},
+    {"nom": "poulet", "genre": "m", "rime":"ait"},
+    {"nom": "anglais", "genre": "m", "rime":"ait"},
+    {"nom": "français", "genre": "m", "rime":"ait"},
+    {"nom": "ballet", "genre": "m", "rime":"ait"},
+    {"nom": "valet", "genre": "m", "rime":"ait"},
+    {"nom": "gilet", "genre": "m", "rime":"ait"},
+    {"nom": "galet", "genre": "m", "rime":"ait"},
+    {"nom": "mollet", "genre": "m", "rime":"ait"},
+    {"nom": "palais", "genre": "m", "rime":"ait"},
+    {"nom": "couplet", "genre": "m", "rime":"ait"},
 ]
+
 liste_verbe = [
     "apporte",
     "entre",
@@ -115,41 +132,46 @@ liste_adjectif_masculin = [
     "tranquille",
 ]
 
+def rime_AABB():
+    """Retourne un poème avec la structure de rime AABB
+    """
+    liste_nom_rimant_A = []
+    liste_nom_rimant_B = []
+    premier_A = random.choice(liste_nom)
+    premier_B = random.choice(liste_nom)
 
-def nouvelle_phrase():
-    """Retourne une phrase selon une structure.
+    while (premier_A["rime"] == premier_B["rime"]):
+        premier_B = random.choice(liste_nom)
+    for i in range(len(liste_nom)):
+        if liste_nom[i]["rime"] == premier_A["rime"]:
+            liste_nom_rimant_A.append(liste_nom[i])
+        if liste_nom[i]["rime"] == premier_B["rime"]:
+            liste_nom_rimant_B.append(liste_nom[i])
+    deuxieme_A = random.choice(liste_nom_rimant_A)
+    deuxieme_B = random.choice(liste_nom_rimant_B)
+    structure_AABB = "{}\n{}\n{}\n{}\n".format(groupe_nominal(premier_A), groupe_nominal(deuxieme_A), groupe_nominal(premier_B), groupe_nominal(deuxieme_B))
+    return structure_AABB
+
+
+def groupe_nominal(dict_nom = random.choice(liste_nom)):
+    """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
+    On détermine le déterminant par la suite et si on ajoute un complément.
 
     Args:
-        nombre_nom: Le nombre de nom
-
-    Returns:
-        Une phrase.
-    """
-    dict_nom = random.choice(liste_nom)  # Retourne un nom au hasard dans la liste
-    nom = dict_nom["nom"]  # prend l'attribut nom du dict
-    det = nom_vers_determinant(dict_nom)  # retourne un dét du même genre
-    verbe = groupe_verbal()
-    phrase = "{} {} {}".format(det, nom, verbe)
-    return phrase
-
-
-def groupe_nominal():
-    """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux). On détermine le déterminant par la suite et si on ajoute un complément.
+        dict_nom: Un dictionnaire contenant un nom.
 
     Returns:
         Un groupe nominal.
     """
-    dict_nom = random.choice(liste_nom)
     noyau = dict_nom["nom"]
     determinant = nom_vers_determinant(dict_nom)
-    expansion = nom_vers_adjectif(dict_nom)
-    if len(expansion) > 5:
-        # Si adjectif long on le met après le noyau
-        groupe_nominal = "{} {} {}".format(determinant, noyau, expansion)
-    else:
-        # Si adjectif court on le met avant le noyau
-        groupe_nominal = "{} {} {}".format(determinant, expansion, noyau)
 
+    determinant = verifier_mot_debute_voyelle(noyau, determinant)
+
+    if determinant[-1] == "'":
+        groupe_nominal = "{}{}".format(determinant, noyau)
+    else:
+        groupe_nominal = "{} {}".format(determinant, noyau)
     return groupe_nominal
 
 def groupe_verbal():
@@ -172,9 +194,18 @@ def groupe_verbal():
     noyau = random.choice(liste_verbe)
     pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
 
-    groupe_verbal = "{} {} {}".format(pronom, noyau, groupe_nominal())
+    groupe_verbal = "{} {} {}".format(pronom, groupe_pronom(), noyau)
     return groupe_verbal
 
+def groupe_pronom():
+    """Création d'un pronom
+
+    Returns:
+        Un pronom et son extension
+    """
+    pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
+    groupe_pronom = "{}, {},".format(pronom, groupe_nominal())
+    return groupe_pronom
 
 def nom_vers_determinant(dict_nom):
     """Retourne un déterminant du même genre que le nom.
@@ -189,6 +220,19 @@ def nom_vers_determinant(dict_nom):
         determinant = random.choice(liste_determinant_feminin)
     else:
         determinant = random.choice(liste_determinant_masculin)
+    return determinant
+
+def verifier_mot_debute_voyelle(nom, determinant):
+    """Retourne un déterminant selon si le mot passé en argument commence par une voyelle
+
+    Returns:
+        determinant
+    """
+    if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h"):
+        if determinant == "la" or determinant == "le":
+            determinant = "l'"
+        if determinant== "ta":
+            determinant == "ton"
     return determinant
 
 
@@ -208,5 +252,4 @@ def nom_vers_adjectif(dict_nom):
     return adjectif
 
 if __name__ == "__main__":
-    print(groupe_verbal())
-    # print(nouvelle_phrase() + ",\n" + nouvelle_phrase() + ",\n" + nouvelle_phrase()+ ",\n" + nouvelle_phrase())
+    print(rime_AABB())
