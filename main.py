@@ -1,37 +1,37 @@
 import random
 
 liste_nom = [
-    {"nom": "rime", "genre": "m", "rime":"ime"},
-    {"nom": "crime", "genre": "m", "rime":"ime"},
-    {"nom": "prime", "genre": "f", "rime":"ime"},
-    {"nom": "déprime", "genre": "f", "rime":"ime"},
-    {"nom": "intérim", "genre": "m", "rime":"ime"},
-    {"nom": "gym", "genre": "m", "rime":"ime"},
-    {"nom": "lime", "genre": "f", "rime":"ime"},
-    {"nom": "cybercrime", "genre": "m", "rime":"ime"},
-    {"nom": "abime", "genre": "m", "rime":"ime"},
-    {"nom": "enzyme", "genre": "f", "rime":"ime"},
-    {"nom": "régime", "genre": "m", "rime":"ime"},
-    {"nom": "estime", "genre": "f", "rime":"ime"},
-    {"nom": "anonyme", "genre": "m", "rime":"ime"},
-    {"nom": "victime", "genre": "f", "rime":"ime"},
-    {"nom": "sublime", "genre": "m", "rime":"ime"},
-    {"nom": "synonyme", "genre": "m", "rime":"ime"},
-    {"nom": "acronyme", "genre": "f", "rime":"ime"},
-    {"nom": "laid", "genre": "m", "rime":"ait"},
-    {"nom": "plaie", "genre": "f", "rime":"ait"},
-    {"nom": "volet", "genre": "m", "rime":"ait"},
-    {"nom": "reflet", "genre": "m", "rime":"ait"},
-    {"nom": "poulet", "genre": "m", "rime":"ait"},
-    {"nom": "anglais", "genre": "m", "rime":"ait"},
-    {"nom": "français", "genre": "m", "rime":"ait"},
-    {"nom": "ballet", "genre": "m", "rime":"ait"},
-    {"nom": "valet", "genre": "m", "rime":"ait"},
-    {"nom": "gilet", "genre": "m", "rime":"ait"},
-    {"nom": "galet", "genre": "m", "rime":"ait"},
-    {"nom": "mollet", "genre": "m", "rime":"ait"},
-    {"nom": "palais", "genre": "m", "rime":"ait"},
-    {"nom": "couplet", "genre": "m", "rime":"ait"},
+    {"nom": "rime", "genre": "m", "rime": "ime"},
+    {"nom": "crime", "genre": "m", "rime": "ime"},
+    {"nom": "prime", "genre": "f", "rime": "ime"},
+    {"nom": "déprime", "genre": "f", "rime": "ime"},
+    {"nom": "intérim", "genre": "m", "rime": "ime"},
+    {"nom": "gym", "genre": "m", "rime": "ime"},
+    {"nom": "lime", "genre": "f", "rime": "ime"},
+    {"nom": "cybercrime", "genre": "m", "rime": "ime"},
+    {"nom": "abime", "genre": "m", "rime": "ime"},
+    {"nom": "enzyme", "genre": "f", "rime": "ime"},
+    {"nom": "régime", "genre": "m", "rime": "ime"},
+    {"nom": "estime", "genre": "f", "rime": "ime"},
+    {"nom": "anonyme", "genre": "m", "rime": "ime"},
+    {"nom": "victime", "genre": "f", "rime": "ime"},
+    {"nom": "sublime", "genre": "m", "rime": "ime"},
+    {"nom": "synonyme", "genre": "m", "rime": "ime"},
+    {"nom": "acronyme", "genre": "f", "rime": "ime"},
+    {"nom": "laid", "genre": "m", "rime": "ait"},
+    {"nom": "plaie", "genre": "f", "rime": "ait"},
+    {"nom": "volet", "genre": "m", "rime": "ait"},
+    {"nom": "reflet", "genre": "m", "rime": "ait"},
+    {"nom": "poulet", "genre": "m", "rime": "ait"},
+    {"nom": "anglais", "genre": "m", "rime": "ait"},
+    {"nom": "français", "genre": "m", "rime": "ait"},
+    {"nom": "ballet", "genre": "m", "rime": "ait"},
+    {"nom": "valet", "genre": "m", "rime": "ait"},
+    {"nom": "gilet", "genre": "m", "rime": "ait"},
+    {"nom": "galet", "genre": "m", "rime": "ait"},
+    {"nom": "mollet", "genre": "m", "rime": "ait"},
+    {"nom": "palais", "genre": "m", "rime": "ait"},
+    {"nom": "couplet", "genre": "m", "rime": "ait"},
 ]
 
 liste_verbe = [
@@ -132,6 +132,7 @@ liste_adjectif_masculin = [
     "tranquille",
 ]
 
+
 def rime_AABB():
     """Retourne un poème avec la structure de rime AABB
 
@@ -143,7 +144,7 @@ def rime_AABB():
     premier_A = random.choice(liste_nom)
     premier_B = random.choice(liste_nom)
 
-    while (premier_A["rime"] == premier_B["rime"]):
+    while premier_A["rime"] == premier_B["rime"]:
         premier_B = random.choice(liste_nom)
     for i in range(len(liste_nom)):
         if liste_nom[i]["rime"] == premier_A["rime"]:
@@ -152,11 +153,16 @@ def rime_AABB():
             liste_nom_rimant_B.append(liste_nom[i])
     deuxieme_A = random.choice(liste_nom_rimant_A)
     deuxieme_B = random.choice(liste_nom_rimant_B)
-    structure_AABB = "{}\n{}\n{}\n{}\n".format(groupe_nominal(premier_A), groupe_nominal(deuxieme_A), groupe_nominal(premier_B), groupe_nominal(deuxieme_B))
+    structure_AABB = "{}\n{}\n{}\n{}\n".format(
+        groupe_nominal(premier_A),
+        groupe_nominal(deuxieme_A),
+        groupe_nominal(premier_B),
+        groupe_nominal(deuxieme_B),
+    )
     return structure_AABB
 
 
-def groupe_nominal(dict_nom = random.choice(liste_nom)):
+def groupe_nominal(dict_nom=random.choice(liste_nom)):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
     On détermine le déterminant par la suite et si on ajoute un complément.
 
@@ -178,6 +184,7 @@ def groupe_nominal(dict_nom = random.choice(liste_nom)):
         groupe_nominal = "{} {}".format(determinant, noyau)
     return groupe_nominal
 
+
 def groupe_verbal():
     """Création d'un groupe verbal
 
@@ -190,6 +197,7 @@ def groupe_verbal():
     groupe_verbal = "{} {} {}".format(pronom, groupe_pronom(), noyau)
     return groupe_verbal
 
+
 def groupe_pronom():
     """Création d'un pronom
 
@@ -199,6 +207,7 @@ def groupe_pronom():
     pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
     groupe_pronom = "{}, {},".format(pronom, groupe_nominal())
     return groupe_pronom
+
 
 def nom_vers_determinant(dict_nom):
     """Retourne un déterminant du même genre que le nom.
@@ -215,6 +224,7 @@ def nom_vers_determinant(dict_nom):
         determinant = random.choice(liste_determinant_masculin)
     return determinant
 
+
 def verifier_mot_debute_voyelle(nom, determinant):
     """Retourne un déterminant selon si le mot passé en argument commence par une voyelle
 
@@ -224,7 +234,7 @@ def verifier_mot_debute_voyelle(nom, determinant):
     if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h"):
         if determinant == "la" or determinant == "le":
             determinant = "l'"
-        if determinant== "ta":
+        if determinant == "ta":
             determinant == "ton"
     return determinant
 
@@ -243,6 +253,7 @@ def nom_vers_adjectif(dict_nom):
     else:
         adjectif = random.choice(liste_adjectif_masculin)
     return adjectif
+
 
 if __name__ == "__main__":
     print(rime_AABB())
