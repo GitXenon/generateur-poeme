@@ -134,6 +134,9 @@ liste_adjectif_masculin = [
 
 def rime_AABB():
     """Retourne un poème avec la structure de rime AABB
+
+    Returns:
+        structure_AABB: Un court poème formatté avec la structure de rime AABB.
     """
     liste_nom_rimant_A = []
     liste_nom_rimant_B = []
@@ -158,7 +161,7 @@ def groupe_nominal(dict_nom = random.choice(liste_nom)):
     On détermine le déterminant par la suite et si on ajoute un complément.
 
     Args:
-        dict_nom: Un dictionnaire contenant un nom.
+        dict_nom: Un dictionnaire contenant un nom. Par défaut on choisit un dictionnaire au hasard dans la liste.
 
     Returns:
         Un groupe nominal.
@@ -169,6 +172,7 @@ def groupe_nominal(dict_nom = random.choice(liste_nom)):
     determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     if determinant[-1] == "'":
+        # Dernier caractère est un apostrophe donc on doit coller déterminant avec noyau
         groupe_nominal = "{}{}".format(determinant, noyau)
     else:
         groupe_nominal = "{} {}".format(determinant, noyau)
@@ -180,17 +184,6 @@ def groupe_verbal():
     Returns:
         un groupe verbal
     """
-    # # complement_direct = [
-    #     "",
-    #     groupe_nominal(),
-    #     pronom(),
-    #     groupe_verbal_infinitif(),
-    #     subordonnee_completive(),
-    # ]  # complément direct ou non
-    # complement_indirect = []
-    # avec_attribut = []
-    # avec_modificateur = []
-
     noyau = random.choice(liste_verbe)
     pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
 
