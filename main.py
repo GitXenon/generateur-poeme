@@ -358,4 +358,11 @@ def nom_vers_adjectif(dict_nom):
 
 
 if __name__ == "__main__":
-    print(rime_AABB())
+    print("Bienvenue au générateur de poème.\n-------------------\n\n")
+    choix = input("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n\n")
+    if choix == "1":
+        print(rime_AABB())
+    if choix == "2":
+        print(rime_ABBA())
+    if choix == "3":
+        print(rime_ABAB())

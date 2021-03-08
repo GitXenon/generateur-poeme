@@ -10,7 +10,7 @@ nom::"français"
     |...
 ...
 ```
-Une seule fonction est implémenter pour l'instant, celle de générer des poèmes rimés style AABB.
+Quelques fonctions sont implémentés pour l'instant, comme générer un poème avec une structure de rime AABB ou ABAB ou ABBA.
 ```python
 >>> python main.py
 l'abime
