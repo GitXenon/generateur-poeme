@@ -137,11 +137,14 @@ liste_preposition = [
 ]
 
 
-def rime_AABB():
-    """Retourne un poème avec la structure de rime AABB
+def initiation_rime():
+    """Initie une liste de mots rimant pour être utilisée dans un poème.
 
     Returns:
-        structure_AABB: Un court poème formatté avec la structure de rime AABB.
+        premier_A: dict contenant un nom qui rime avec deuxieme_A
+        deuxieme_A: dict contenant un nom qui rime avec premier_A
+        premier_B: dict contenant un nom qui rime avec deuxieme_B
+        deuxieme_B: dict contenant un nom qui rime avec premier_B
     """
     liste_nom_rimant_A = []
     liste_nom_rimant_B = []
@@ -157,6 +160,17 @@ def rime_AABB():
             liste_nom_rimant_B.append(liste_nom[i])
     deuxieme_A = random.choice(liste_nom_rimant_A)
     deuxieme_B = random.choice(liste_nom_rimant_B)
+
+    return premier_A, deuxieme_A, premier_B, deuxieme_B
+
+
+def rime_AABB():
+    """Retourne un poème avec la structure de rime AABB
+
+    Returns:
+        structure_AABB: Un court poème formatté avec la structure de rime AABB.
+    """
+    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
     structure_AABB = "{}\n{}\n{}\n{}\n".format(
         groupe_verbal_avec_preposition(premier_A),
         groupe_nominal_adjectif(deuxieme_A).capitalize(),
@@ -165,6 +179,35 @@ def rime_AABB():
     )
     return structure_AABB
 
+def rime_ABAB():
+    """Retourne un poème avec la structure de rime ABAB
+
+    Returns:
+        structure_ABAB: Un court poème formatté avec la structure de rime ABAB.
+    """
+    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
+    structure_ABAB = "{}\n{}\n{}\n{}\n".format(
+        groupe_verbal_avec_preposition(premier_A),
+        groupe_nominal_adjectif(premier_B).capitalize(),
+        groupe_verbal_avec_preposition(deuxieme_A),
+        groupe_nominal_adjectif(deuxieme_B).capitalize(),
+    )
+    return structure_ABAB
+
+def rime_ABBA():
+    """Retourne un poème avec la structure de rime ABBA
+
+    Returns:
+        structure_AABB: Un court poème formatté avec la structure de rime AABB.
+    """
+    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
+    structure_ABBA = "{}\n{}\n{}\n{}\n".format(
+        groupe_verbal_avec_preposition(premier_A),
+        groupe_nominal_adjectif(premier_B).capitalize(),
+        groupe_verbal_avec_preposition(deuxieme_B),
+        groupe_nominal_adjectif(deuxieme_A).capitalize(),
+    )
+    return structure_ABBA
 
 def groupe_nominal(dict_nom=None):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
@@ -266,7 +309,6 @@ def groupe_prepositionnel():
     return groupe_prepositionnel
 
 
-
 def nom_vers_determinant(dict_nom):
     """Retourne un déterminant du même genre que le nom.
 
@@ -289,7 +331,7 @@ def verifier_mot_debute_voyelle(nom, determinant):
     Returns:
         determinant
     """
-    if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h"):
+    if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h" or "é"):
         if determinant == "la" or determinant == "le":
             determinant = "l'"
         if determinant == "ta":
