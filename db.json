@@ -1,0 +1,104 @@
+{
+    "nom":
+    {
+        "1": {"mot":"amour","nb_syllabes":2,"genre":"m","nombre":"s","famille":"amour","rime":"ur"}
+    },
+    "adjectif":
+    {
+        "1":
+        {
+            "ms": {"mot":"beau","nb_syllabes":1,"rime":"o"},
+            "fs": {"mot":"belle","nb_syllabes":2,"rime":"èl"},
+            "mp": {"mot":"beaux","nb_syllabes":1,"rime":"o"},
+            "fp": {"mot":"belles","nb_syllabes":2,"rime":"èl"}
+        }
+    },
+    "verbe":
+    {
+        "1":
+        {
+            "indicatif_present":
+            [
+                {"mot":"aime","nb_syllabes":2,"rime":"èm"},
+                {"mot":"aimes","nb_syllabes":2,"rime":"èm"},
+                {"mot":"aime","nb_syllabes":2,"rime":"èm"},
+                {"mot":"aimons","nb_syllabes":2,"rime":"ô"},
+                {"mot":"aimez","nb_syllabes":2,"rime":"é"},
+                {"mot":"aiment","nb_syllabes":2,"rime":"èm"}
+            ]
+        }
+    },
+    "determinant":
+    {
+        "1":
+        {
+            "ms": {"mot":"le","nb_syllabes":1,"rime":"e"},
+            "fs": {"mot":"la","nb_syllabes":1,"rime":"a"},
+            "mp": {"mot":"les","nb_syllabes":1,"rime":"é"},
+            "fp": {"mot":"les","nb_syllabes":1,"rime":"é"}
+        },
+        "2":
+        {
+            "m": {"mot":"un","nb_syllabes":1,"rime":"û"},
+            "f": {"mot":"une","nb_syllabes":2,"rime":"yn"},
+            "mp": {"mot":"des","nb_syllabes":1,"rime":"é"},
+            "fp": {"mot":"des","nb_syllabes":1,"rime":"é"}
+        },
+        "3":
+        {
+            "m": {"mot":"ton","nb_syllabes":1,"rime":"ô"},
+            "f": {"mot":"ta","nb_syllabes":1,"rime":"a"},
+            "mp": {"mot":"tes","nb_syllabes":1,"rime":"é"},
+            "fp": {"mot":"tes","nb_syllabes":1,"rime":"é"}
+        },
+        "4":
+        {
+            "m": {"mot":"mon","nb_syllabes":1,"rime":"ô"},
+            "f": {"mot":"ma","nb_syllabes":1,"rime":"a"},
+            "mp": {"mot":"mes","nb_syllabes":1,"rime":"é"},
+            "fp": {"mot":"mes","nb_syllabes":1,"rime":"é"}
+        }
+    },
+    "preposition":
+    {
+        "1": {"mot":"de","nb_syllabes":1,"rime":"e"},
+        "2": {"mot":"à","nb_syllabes":1,"rime":"a"},
+        "3": {"mot":"durant","nb_syllabes":2,"rime":"â"},
+        "4": {"mot":"pendant","nb_syllabes":2,"rime":"â"},
+        "5": {"mot":"après","nb_syllabes":2,"rime":"è"},
+        "6": {"mot":"en","nb_syllabes":1,"rime":"â"},
+        "7": {"mot":"pour","nb_syllabes":1,"rime":"ur"},
+        "8": {"mot":"avant","nb_syllabes":2,"rime":"â"},
+        "9": {"mot":"entre","nb_syllabes":2,"rime":"tr"},
+        "10": {"mot":"près","nb_syllabes":1,"rime":"è"},
+        "11": {"mot":"avec","nb_syllabes":2,"rime":"èk"},
+        "12": {"mot":"excepté","nb_syllabes":3,"rime":"é"},
+        "13": {"mot":"sans","nb_syllabes":1,"rime":"â"},
+        "14": {"mot":"chez","nb_syllabes":1,"rime":"é"},
+        "15": {"mot":"hormis","nb_syllabes":2,"rime":"i"},
+        "16": {"mot":"sauf","nb_syllabes":1,"rime":"of"},
+        "17": {"mot":"concernant","nb_syllabes":3,"rime":"â"},
+        "18": {"mot":"hors","nb_syllabes":1,"rime":"òr"},
+        "19": {"mot":"selon","nb_syllabes":2,"rime":"ô"},
+        "20": {"mot":"contre","nb_syllabes":2,"rime":"tr"},
+        "21": {"mot":"jusque","nb_syllabes":2,"rime":"sk"},
+        "22": {"mot":"sous","nb_syllabes":1,"rime":"u"},
+        "23": {"mot":"dans","nb_syllabes":1,"rime":"â"},
+        "24": {"mot":"malgré","nb_syllabes":2,"rime":"é"},
+        "25": {"mot":"suivant","nb_syllabes":2,"rime":"â"},
+        "26": {"mot":"de","nb_syllabes":1,"rime":"e"},
+        "27": {"mot":"moyennant","nb_syllabes":3,"rime":"â"},
+        "28": {"mot":"sur","nb_syllabes":1,"rime":"yr"},
+        "29": {"mot":"depuis","nb_syllabes":2,"rime":"i"},
+        "30": {"mot":"outre","nb_syllabes":2,"rime":"tr"},
+        "31": {"mot":"vers","nb_syllabes":1,"rime":"Èr"},
+        "32": {"mot":"derrière","nb_syllabes":3,"rime":"Èr"},
+        "33": {"mot":"par","nb_syllabes":1,"rime":"ar"},
+        "34": {"mot":"voici","nb_syllabes":2,"rime":"i"},
+        "35": {"mot":"dès","nb_syllabes":1,"rime":"è"},
+        "36": {"mot":"parmi","nb_syllabes":2,"rime":"i"},
+        "37": {"mot":"voilà​","nb_syllabes":2,"rime":"à"},
+        "38": {"mot":"devant","nb_syllabes":2,"rime":"â"},
+        "39": {"mot":"vu","nb_syllabes":1,"rime":"y"}
+    }
+}

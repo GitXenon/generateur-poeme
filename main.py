@@ -1,140 +1,8 @@
 import random
 
-liste_nom = [
-    {"nom": "rime", "genre": "m", "rime": "im"},
-    {"nom": "crime", "genre": "m", "rime": "im"},
-    {"nom": "prime", "genre": "f", "rime": "im"},
-    {"nom": "déprime", "genre": "f", "rime": "im"},
-    {"nom": "intérim", "genre": "m", "rime": "im"},
-    {"nom": "gym", "genre": "m", "rime": "im"},
-    {"nom": "lime", "genre": "f", "rime": "im"},
-    {"nom": "cybercrime", "genre": "m", "rime": "im"},
-    {"nom": "abime", "genre": "m", "rime": "im"},
-    {"nom": "enzyme", "genre": "f", "rime": "im"},
-    {"nom": "régime", "genre": "m", "rime": "im"},
-    {"nom": "estime", "genre": "f", "rime": "im"},
-    {"nom": "anonyme", "genre": "m", "rime": "im"},
-    {"nom": "victime", "genre": "f", "rime": "im"},
-    {"nom": "sublime", "genre": "m", "rime": "im"},
-    {"nom": "synonyme", "genre": "m", "rime": "im"},
-    {"nom": "acronyme", "genre": "f", "rime": "im"},
-    {"nom": "laid", "genre": "m", "rime": "è"},
-    {"nom": "plaie", "genre": "f", "rime": "è"},
-    {"nom": "volet", "genre": "m", "rime": "è"},
-    {"nom": "reflet", "genre": "m", "rime": "è"},
-    {"nom": "poulet", "genre": "m", "rime": "è"},
-    {"nom": "anglais", "genre": "m", "rime": "è"},
-    {"nom": "français", "genre": "m", "rime": "è"},
-    {"nom": "ballet", "genre": "m", "rime": "è"},
-    {"nom": "valet", "genre": "m", "rime": "è"},
-    {"nom": "gilet", "genre": "m", "rime": "è"},
-    {"nom": "galet", "genre": "m", "rime": "è"},
-    {"nom": "mollet", "genre": "m", "rime": "è"},
-    {"nom": "palais", "genre": "m", "rime": "è"},
-    {"nom": "couplet", "genre": "m", "rime": "è"},
-    {"nom": "amour", "genre": "f", "rime": "ur"},
-    {"nom": "tourd", "genre": "m", "rime": "ur"},
-    {"nom": "bourre", "genre": "m", "rime": "ur"},
-    {"nom": "rebours", "genre": "m", "rime": "ur"},
-    {"nom": "atour", "genre": "m", "rime": "ur"},
-    {"nom": "séjour", "genre": "m", "rime": "ur"},
-    {"nom": "discours", "genre": "m", "rime": "ur"},
-    {"nom": "parcours", "genre": "m", "rime": "ur"},
-    {"nom": "retour", "genre": "m", "rime": "ur"},
-    {"nom": "jour", "genre": "m", "rime": "ur"},
-    {"nom": "cour", "genre": "f", "rime": "ur"},
-    {"nom": "four", "genre": "m", "rime": "ur"},
-    {"nom": "sourd", "genre": "m", "rime": "ur"},
-    {"nom": "secours", "genre": "m", "rime": "ur"},
-    {"nom": "concours", "genre": "m", "rime": "ur"},
-]
+from tinydb import TinyDB, Query
 
-liste_verbe = [
-    "apporte",
-    "entre",
-    "s'installe",
-    "agace",
-    "gratte",
-    "vit",
-    "grandit",
-    "boit",
-    "plante",
-]
-
-liste_determinant = [
-    {"m":"un", "f":"une"},
-    {"m":"le", "f":"la"},
-    {"m":"ton", "f":"ta"},
-    {"m":"mon", "f":"ma"},
-]
-
-liste_adjectif = [
-    {"m":"oblitérateur", "f":"oblitératrice"},
-    {"m":"vérificatif", "f":"vérificative"},
-    {"m":"congratulatoire", "f":"congratulatoire"},
-    {"m":"énumérateur", "f":"énumératrice"},
-    {"m":"apollinarien", "f":"apollinarienne"},
-    {"m":"sardanapalesque", "f":"sardanapalesque"},
-    {"m":"transfigurateur", "f":"transfiguratrice"},
-    {"m":"émerillonné", "f":"émerillonnée"},
-    {"m":"vivificateur", "f":"vivificatrice"},
-    {"m":"résurrectionnel", "f":"résurrectionnelle"},
-    {"m":"vociférateur", "f":"vocifératrice"},
-    {"m":"caméléonesque", "f":"caméléonesque"},
-    {"m":"phraséologique", "f":"phraséologique"},
-    {"m":"localisateur", "f":"localisatrice"},
-    {"m":"glorificateurs", "f":"glorificatrice"},
-    {"m":"épigrammatique", "f":"épigrammatique"},
-    {"m":"tintinnabulant", "f":"tintinnabulante"},
-    {"m":"irréalisé", "f":"irréalisée"},
-    {"m":"inassouvissable", "f":"inassouvissable"},
-    {"m":"valétudinaire", "f":"valétudinaire"},
-    {"m":"méphistophélique", "f":"méphistophélique"},
-    {"m":"prévaricateur", "f":"prévaricatrice"},
-
-]
-
-liste_preposition = [
-    "à",
-    "durant",
-    "pendant",
-    "après",
-    "en",
-    "pour",
-    "avant",
-    "entre",
-    "près",
-    "avec",
-    "excepté",
-    "sans",
-    "chez",
-    "hormis",
-    "sauf",
-    "concernant",
-    "hors",
-    "selon",
-    "contre",
-    "jusque",
-    "sous",
-    "dans",
-    "malgré",
-    "suivant",
-    "de",
-    "moyennant",
-    "sur",
-    "depuis",
-    "outre",
-    "vers",
-    "derrière",
-    "par",
-    "voici",
-    "dès",
-    "parmi",
-    "voilà​",
-    "devant",
-    "vu",
-]
-
+db = TinyDB('db.json')
 
 def initiation_rime():
     """Initie une liste de mots rimant pour être utilisée dans un poème.
@@ -356,7 +224,7 @@ def nom_vers_adjectif(dict_nom):
     return adjectif
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     print("Bienvenue au générateur de poème.\n-------------------\n\n")
     print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
     choix = input()
