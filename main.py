@@ -4,6 +4,8 @@ from tinydb import TinyDB, Query
 
 db = TinyDB('db.json')
 
+# Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
+
 def initiation_rime():
     """Initie une liste de mots rimant pour être utilisée dans un poème.
 
@@ -222,6 +224,41 @@ def nom_vers_adjectif(dict_nom):
         if k == dict_nom["genre"]:
             adjectif = dict_adjectif[k]
     return adjectif
+
+def nombre_syllables(mot):
+    """Retourne le nombre de syllables dans un mot passé en argument.
+
+    hirondelle
+    hi/ron/del/le
+
+    Args:
+        mot: string
+    
+    Returns:
+        int
+    """
+    # 1. Une consonne placée entre deux voyelles introduit une nouvelle syllabe.
+    # 3. Quand un mot contient deux consonnes identiques, on coupe toujours les syllabes entre les deux consonnes.
+    # 4. Les groupes consonantiques composés d'une première consonne suivie de r ou de l ne peuvent pas être séparés.
+    liste_voyelle = ['a', 'e', 'i', 'o', 'u', 'y', 'é']
+    num_syl = 1
+
+    for i in range(len(mot)):
+        if mot[i] not in liste_voyelle:
+            if i-1 >= 0:
+                if mot[i-1] in liste_voyelle:
+                    j = i+1
+                    while(j < len(mot)):
+                        if (mot[i+1] == 'r' and mot[i] != 'r') or (mot[i+1] == 'l' and mot[i] != 'l'):
+                            break
+                        if mot[j] in liste_voyelle:
+                            num_syl = num_syl+ 1
+                            break
+                        else:
+                            j=j+1
+    return num_syl
+
+
 
 
 if __name__ == "__main__": 
