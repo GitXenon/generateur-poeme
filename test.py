@@ -1,5 +1,8 @@
 import unittest
-from main import nombre_syllables
+
+from tinydb import TinyDB, Query
+
+from main import nombre_syllables, groupe_nominal
 import wikitionnaire
 
 
@@ -29,7 +32,7 @@ class TestNombreSyllable(unittest.TestCase):
         self.assertEqual(nombre_syllables("capable"), 2)
 
 
-class Test_wikitionnaire(unittest.TestCase):
+class TestWikitionnaire(unittest.TestCase):
     def test_wikitionnaire_1(self):
         nouvel_adj = wikitionnaire.recup_adjectif("amoureux")
         self.assertEqual(nouvel_adj["ms"]["mot"], "amoureux")
@@ -80,6 +83,78 @@ class Test_wikitionnaire(unittest.TestCase):
         self.assertEqual(nouvel_adj["mp"]["API"], "\\pɔ.li.tik\\")
         self.assertEqual(nouvel_adj["fs"]["API"], "\\pɔ.li.tik\\")
         self.assertEqual(nouvel_adj["fp"]["API"], "\\pɔ.li.tik\\")
+
+    def test_wikitionnaire_4(self):
+        nouveau_nom = wikitionnaire.recup_nom("voix")
+        self.assertEqual(nouveau_nom[0]["mot"], "voix")
+        self.assertEqual(nouveau_nom[1]["mot"], "voix")
+
+        self.assertEqual(nouveau_nom[0]["genre"], "f")
+        self.assertEqual(nouveau_nom[0]["nombre"], "s")
+        self.assertEqual(nouveau_nom[1]["genre"], "f")
+        self.assertEqual(nouveau_nom[1]["nombre"], "p")
+
+        self.assertEqual(nouveau_nom[0]["nb_syllabes"], 1)
+        self.assertEqual(nouveau_nom[1]["nb_syllabes"], 1)
+
+        self.assertEqual(nouveau_nom[0]["API"], "\\vwa\\")
+        self.assertEqual(nouveau_nom[1]["API"], "\\vwa\\")
+
+    def test_wikitionnaire_5(self):
+        nouveau_nom = wikitionnaire.recup_nom("amant")
+        self.assertEqual(nouveau_nom[0]["mot"], "amant")
+        self.assertEqual(nouveau_nom[1]["mot"], "amants")
+
+        self.assertEqual(nouveau_nom[0]["genre"], "m")
+        self.assertEqual(nouveau_nom[0]["nombre"], "s")
+        self.assertEqual(nouveau_nom[1]["genre"], "m")
+        self.assertEqual(nouveau_nom[1]["nombre"], "p")
+
+        self.assertEqual(nouveau_nom[0]["nb_syllabes"], 2)
+        self.assertEqual(nouveau_nom[1]["nb_syllabes"], 2)
+
+        self.assertEqual(nouveau_nom[0]["API"], "\\a.mɑ̃\\")
+        self.assertEqual(nouveau_nom[1]["API"], "\\a.mɑ̃\\")
+
+    def test_wikitionnaire_6(self):
+        nouveau_nom = wikitionnaire.recup_nom("tendresse")
+        self.assertEqual(nouveau_nom[0]["mot"], "tendresse")
+        self.assertEqual(nouveau_nom[1]["mot"], "tendresses")
+
+        self.assertEqual(nouveau_nom[0]["genre"], "f")
+        self.assertEqual(nouveau_nom[0]["nombre"], "s")
+        self.assertEqual(nouveau_nom[1]["genre"], "f")
+        self.assertEqual(nouveau_nom[1]["nombre"], "p")
+
+        self.assertEqual(nouveau_nom[0]["nb_syllabes"], 2)
+        self.assertEqual(nouveau_nom[1]["nb_syllabes"], 2)
+
+        self.assertEqual(nouveau_nom[0]["API"], "\\tɑ̃.dʁɛs\\")
+        self.assertEqual(nouveau_nom[1]["API"], "\\tɑ̃.dʁɛs\\")
+
+class TestGroupe(unittest.TestCase):
+
+    def setUp(self):
+        self.db = TinyDB('db.json')
+
+    def test_groupe_nominal_1(self):
+        Nom = self.db.table('nom')
+        Determinant = self.db.table('determinant')
+        dict_nom = Nom.all()[0] # mot: amour
+        dict_determinant = Determinant.all()[0] # mot: le/la/les
+        gn = groupe_nominal(dict_determinant, dict_nom)
+        self.assertEqual(gn, "l'amour")
+        self.db.close()
+    
+    def test_groupe_nominal_2(self):
+        Nom = self.db.table('nom')
+        Determinant = self.db.table('determinant')
+        dict_nom = Nom.all()[6] # mot: désir
+        dict_determinant = Determinant.all()[2] # mot: ton/ta/tes
+        gn = groupe_nominal(dict_determinant, dict_nom)
+        print(gn)
+        self.assertEqual(gn, "ton désir")
+        self.db.close()
 
 
 if __name__ == "__main__":

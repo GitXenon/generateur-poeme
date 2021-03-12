@@ -2,12 +2,62 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
+def recup_nom(mot):
+    """Retourne une entrée complète
+
+    Returns:
+        nouveau_nom (liste): Liste de dictionnaires avec le nom pour ajouter au DB
+    """
+    url = "https://fr.wiktionary.org/wiki/"
+    page = requests.get(url + mot)
+    soup = BeautifulSoup(page.text, "html.parser")
+
+    table_nombre = soup.find(class_="flextable")
+
+    definition = soup.p
+    if definition.b.text != mot:
+        print("Impossible d'ajouté ce mot: " + mot)
+        return None
+
+    table = soup.find(class_='flextable')
+    liste_mot = table.find_all('td')
+    if len(liste_mot) == 1:
+        resultat = liste_mot[0].find_all('a')
+        nom_s = resultat[0].text.rstrip()
+        nom_p = nom_s
+        nom_API = resultat[1].text
+    elif len(liste_mot) == 3:
+        nom_s = liste_mot[0].a.text
+        nom_p = liste_mot[1].a.text
+        nom_API = liste_mot[2].a.text
+    else:
+        print("Impossible d'ajouté ce mot: " + mot + ". Problème nombre td.")
+        return None
+
+    genre = definition.i.text
+    if genre == 'masculin':
+        nom_syllabes = nom_API.count(".") + 1
+        nouveau_nom = [
+            {"mot": nom_s, "nb_syllabes": nom_syllabes,"genre":"m","nombre":"s","API": nom_API},
+            {"mot": nom_p, "nb_syllabes": nom_syllabes,"genre":"m","nombre":"p","API": nom_API}
+            ]
+    elif genre == 'féminin':
+        nom_syllabes = nom_API.count(".") + 1
+        nouveau_nom = [
+            {"mot": nom_s, "nb_syllabes": nom_syllabes,"genre":"f","nombre":"s","API": nom_API},
+            {"mot": nom_p, "nb_syllabes": nom_syllabes,"genre":"f","nombre":"p","API": nom_API}
+            ]
+    else:
+        print('Problème de genre avec ce mot: ' + mot)
+        return None
+
+    return nouveau_nom
 
 def recup_adjectif(mot):
     """Retourne une entrée complète
 
     Returns:
-        nouvel_adj = Dictionnaire avec l'adjectif pour ajouter au DB
+        nouvel_adj (dict): Dictionnaire avec l'adjectif pour ajouter au DB
     """
     url = "https://fr.wiktionary.org/wiki/"
     page = requests.get(url + mot)
@@ -73,13 +123,66 @@ def recup_adjectif(mot):
     }
     return nouvel_adj
 
-if __name__ == "__main__":
+def exist_database(mot, table):
+    """Retourne true or false is existe déjà dans DB
+
+    Args:
+        mot (str):
+        table (table):
+
+    Returns:
+        is_in_database (bool):
+    """
+    Nom = Query()
+    search_ms = table.search(Nom.ms.mot == mot)
+    search_mp = table.search(Nom.mp.mot == mot)
+    search_fs = table.search(Nom.fs.mot == mot)
+    search_fp = table.search(Nom.fp.mot == mot)
+    if (len(search_ms) or len(search_mp) or len(search_fs) or len(search_fp)) != 0:
+        is_in_database = True
+    else:
+        is_in_database = False
+    return is_in_database
+    
+def ajouter_adjectif_DB(liste_adjectif):
+    """Ajoute un adjectif au DB
+    
+    Args:
+        liste_adjectif (list): Une liste d'adjectifs.
+    """
     db = TinyDB('db.json')
     Adjectif = db.table('adjectif')
-    liste_adjectif_ajouté = ['platonique', 'charnel', 'romantique', 'sentimental', 'aimé', 'tendre', 'beau', 'éternel', 'fraternel', 'incoditionnel', 'passionnel', 'fou', 'immodéré']
-    for item in liste_adjectif_ajouté:
-        print('Ajout de ' + item + ' en cours...')
-        nouvel_adj = recup_adjectif(item)
-        if nouvel_adj is not None:
-            Adjectif.insert(nouvel_adj)
-            print(item + ' ajouté!')
+    for item in liste_adjectif:
+        if exist_database(item, Adjectif) is True:
+            print(item + ' est déjà dans la base de donnée !')
+        else:
+            print('Ajout de ' + item + ' en cours...')
+            nouvel_adj = recup_adjectif(item)
+            if nouvel_adj is not None:
+                Adjectif.insert(nouvel_adj)
+                print(item + ' ajouté!')
+    db.close()
+
+def ajouter_nom_DB(liste_nom):
+    """Ajoute un adjectif au DB
+    
+    Args:
+        liste_adjectif (list): Une liste de noms.
+    """
+    db = TinyDB('db.json')
+    Nom = db.table('nom')
+    for item in liste_nom:
+        if exist_database(item, Nom) is True:
+            print(item + ' est déjà dans la base de donnée !')
+        else:
+            print('Ajout de ' + item + ' en cours...')
+            liste_nom = recup_nom(item)
+            if liste_nom is not None:
+                for dict_mot in liste_nom:
+                    Nom.insert(dict_mot)
+                    print(item + ' ajouté!')
+    db.close()
+
+
+if __name__ == "__main__":
+    pass
