@@ -1,5 +1,7 @@
 import random
 
+import wikitionnaire
+
 from tinydb import TinyDB, Query
 
 db = TinyDB('db.json')
@@ -237,9 +239,6 @@ def nombre_syllables(mot):
     Returns:
         int
     """
-    # 1. Une consonne placée entre deux voyelles introduit une nouvelle syllabe.
-    # 3. Quand un mot contient deux consonnes identiques, on coupe toujours les syllabes entre les deux consonnes.
-    # 4. Les groupes consonantiques composés d'une première consonne suivie de r ou de l ne peuvent pas être séparés.
     liste_voyelle = ['a', 'e', 'i', 'o', 'u', 'y', 'é']
     num_syl = 1
 
@@ -258,16 +257,17 @@ def nombre_syllables(mot):
                             j=j+1
     return num_syl
 
-
-
-
-if __name__ == "__main__": 
-    print("Bienvenue au générateur de poème.\n-------------------\n\n")
-    print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
-    choix = input()
-    if choix == "1":
-        print(rime_AABB())
-    if choix == "2":
-        print(rime_ABBA())
-    if choix == "3":
-        print(rime_ABAB())
+if __name__ == "__main__":
+    word = input('Adjectif à ajouté au DB: ')
+    nouvel_adj = wikitionnaire.recup_mot(word)
+    Adjectif = db.table('adjectif')
+    Adjectif.insert(nouvel_adj)
+    # print("Bienvenue au générateur de poème.\n-------------------\n\n")
+    # print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
+    # choix = input()
+    # if choix == "1":
+    #     print(rime_AABB())
+    # if choix == "2":
+    #     print(rime_ABBA())
+    # if choix == "3":
+    #     print(rime_ABAB())
