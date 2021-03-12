@@ -33,7 +33,8 @@ class TestNombreSyllable(unittest.TestCase):
 
 
 class TestWikitionnaire(unittest.TestCase):
-    def test_wikitionnaire_1(self):
+
+    def test_recup_adjectif_1(self):
         nouvel_adj = wikitionnaire.recup_adjectif("amoureux")
         self.assertEqual(nouvel_adj["ms"]["mot"], "amoureux")
         self.assertEqual(nouvel_adj["mp"]["mot"], "amoureux")
@@ -50,7 +51,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouvel_adj["fs"]["API"], "\\a.mu.ʁøz\\")
         self.assertEqual(nouvel_adj["fp"]["API"], "\\a.mu.ʁøz\\")
 
-    def test_wikitionnaire_2(self):
+    def test_recup_adjectif_2(self):
         nouvel_adj = wikitionnaire.recup_adjectif("beau")
         self.assertEqual(nouvel_adj["ms"]["mot"], "beau")
         self.assertEqual(nouvel_adj["mp"]["mot"], "beaux")
@@ -67,7 +68,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouvel_adj["fs"]["API"], "\\bɛl\\")
         self.assertEqual(nouvel_adj["fp"]["API"], "\\bɛl\\")
 
-    def test_wikitionnaire_3(self):
+    def test_recup_adjectif_3(self):
         nouvel_adj = wikitionnaire.recup_adjectif("politique")
         self.assertEqual(nouvel_adj["ms"]["mot"], "politique")
         self.assertEqual(nouvel_adj["mp"]["mot"], "politiques")
@@ -84,7 +85,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouvel_adj["fs"]["API"], "\\pɔ.li.tik\\")
         self.assertEqual(nouvel_adj["fp"]["API"], "\\pɔ.li.tik\\")
 
-    def test_wikitionnaire_4(self):
+    def test_recup_nom_1(self):
         nouveau_nom = wikitionnaire.recup_nom("voix")
         self.assertEqual(nouveau_nom[0]["mot"], "voix")
         self.assertEqual(nouveau_nom[1]["mot"], "voix")
@@ -100,7 +101,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[0]["API"], "\\vwa\\")
         self.assertEqual(nouveau_nom[1]["API"], "\\vwa\\")
 
-    def test_wikitionnaire_5(self):
+    def test_recup_nom_2(self):
         nouveau_nom = wikitionnaire.recup_nom("amant")
         self.assertEqual(nouveau_nom[0]["mot"], "amant")
         self.assertEqual(nouveau_nom[1]["mot"], "amants")
@@ -116,7 +117,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[0]["API"], "\\a.mɑ̃\\")
         self.assertEqual(nouveau_nom[1]["API"], "\\a.mɑ̃\\")
 
-    def test_wikitionnaire_6(self):
+    def test_recup_nom_3(self):
         nouveau_nom = wikitionnaire.recup_nom("tendresse")
         self.assertEqual(nouveau_nom[0]["mot"], "tendresse")
         self.assertEqual(nouveau_nom[1]["mot"], "tendresses")
@@ -131,6 +132,23 @@ class TestWikitionnaire(unittest.TestCase):
 
         self.assertEqual(nouveau_nom[0]["API"], "\\tɑ̃.dʁɛs\\")
         self.assertEqual(nouveau_nom[1]["API"], "\\tɑ̃.dʁɛs\\")
+
+    def test_recup_determinant_1(self):
+        dict_det = wikitionnaire.recup_determinant("le")
+        self.assertEqual(dict_det["ms"]["mot"], "le")
+        self.assertEqual(dict_det["mp"]["mot"], "les")
+        self.assertEqual(dict_det["fs"]["mot"], "la")
+        self.assertEqual(dict_det["fp"]["mot"], "les")
+
+        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+
+        self.assertEqual(dict_det["ms"]["API"], "\\lə\\")
+        self.assertEqual(dict_det["mp"]["API"], "\\le\\")
+        self.assertEqual(dict_det["fs"]["API"], "\\la\\")
+        self.assertEqual(dict_det["fp"]["API"], "\\le\\")
 
 class TestGroupe(unittest.TestCase):
 

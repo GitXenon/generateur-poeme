@@ -1,6 +1,56 @@
+import re
+
 from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
+
+def recup_determinant(mot):
+    """Retourne une entrée complète
+
+    Returns:
+        dict_det (dict): Dictionnaires avec le déterminant à ajouter au DB
+    """
+    url = "https://fr.wiktionary.org/wiki/"
+    page = requests.get(url + mot)
+    soup = BeautifulSoup(page.text, "html.parser")
+
+    title_pronom = soup.find(id=re.compile('Article\w*'))
+    table = title_pronom.parent.next_sibling.next_sibling
+
+    liste_mot = table.find_all('td')
+    if len(liste_mot) == 5:
+        premier_td = liste_mot[1].find_all('a')
+        deuxieme_td = liste_mot[2].find_all('a')
+        troisieme_td = liste_mot[3].find_all('a')
+        quatrieme_td = liste_mot[4].find_all('a')
+        det_ms = premier_td[0].text
+        det_ms_API = premier_td[1].text
+        det_mp = deuxieme_td[0].text
+        det_mp_API = deuxieme_td[1].text
+        det_fs = troisieme_td[0].text
+        det_fs_API = troisieme_td[1].text
+        det_fp = quatrieme_td[0].text
+        det_fp_API = quatrieme_td[1].text
+
+        det_ms_syllabes = det_ms_API.count(".") + 1
+        det_mp_syllabes = det_mp_API.count(".") + 1
+        det_fs_syllabes = det_fs_API.count(".") + 1
+        det_fp_syllabes = det_fp_API.count(".") + 1
+        
+        dict_det = {
+            'ms': {"mot": det_ms, "nb_syllabes": det_ms_syllabes, "API": det_ms_API},
+            'mp': {"mot": det_mp, "nb_syllabes": det_ms_syllabes, "API": det_mp_API},
+            'fs': {"mot": det_fs, "nb_syllabes": det_ms_syllabes, "API": det_fs_API},
+            'fp': {"mot": det_fp, "nb_syllabes": det_ms_syllabes, "API": det_fp_API}
+        }
+    elif len(liste_mot) == 4:
+        print("PAS ENCORE IMPLÉMENTER !!!")
+        return None
+    else:
+        print("Impossible d'ajouté ce mot: " + mot + ". Problème !!!!")
+        return None
+
+    return dict_det
 
 def recup_nom(mot):
     """Retourne une entrée complète
