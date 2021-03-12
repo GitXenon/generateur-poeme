@@ -2,12 +2,11 @@ import random
 
 from tinydb import TinyDB, Query
 
-from wikitionnaire import recup_mot
+from wikitionnaire import recup_adjectif
 
-db = TinyDB("db.json")
+db = TinyDB('db.json')
 
-# Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel
-
+# Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
 
 def initiation_rime():
     """Initie une liste de mots rimant pour être utilisée dans un poème.
@@ -51,7 +50,6 @@ def rime_AABB():
     )
     return structure_AABB
 
-
 def rime_ABAB():
     """Retourne un poème avec la structure de rime ABAB
 
@@ -67,7 +65,6 @@ def rime_ABAB():
     )
     return structure_ABAB
 
-
 def rime_ABBA():
     """Retourne un poème avec la structure de rime ABBA
 
@@ -82,7 +79,6 @@ def rime_ABBA():
         groupe_nominal_adjectif(deuxieme_A).capitalize(),
     )
     return structure_ABBA
-
 
 def groupe_nominal(dict_nom=None):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
@@ -107,7 +103,6 @@ def groupe_nominal(dict_nom=None):
     else:
         groupe_nominal = "{} {}".format(determinant, noyau)
     return groupe_nominal
-
 
 def groupe_nominal_adjectif(dict_nom=None):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
@@ -134,7 +129,6 @@ def groupe_nominal_adjectif(dict_nom=None):
         groupe_nominal_adjectif = "{} {} {}".format(determinant, expansion, noyau)
     return groupe_nominal_adjectif
 
-
 def groupe_verbal():
     """Création d'un groupe verbal
 
@@ -146,7 +140,6 @@ def groupe_verbal():
 
     groupe_verbal = "{} {} {}".format(pronom, groupe_pronom(), noyau)
     return groupe_verbal
-
 
 def groupe_verbal_avec_preposition(Gn=None):
     """Création d'un groupe verbal avec expansion prepositionnel
@@ -174,7 +167,6 @@ def groupe_pronom():
     pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
     groupe_pronom = "{}, {},".format(pronom, groupe_nominal())
     return groupe_pronom
-
 
 def groupe_prepositionnel():
     """Création d'un groupe prepositionnel
@@ -235,7 +227,6 @@ def nom_vers_adjectif(dict_nom):
             adjectif = dict_adjectif[k]
     return adjectif
 
-
 def nombre_syllables(mot):
     """Retourne le nombre de syllables dans un mot passé en argument.
 
@@ -244,42 +235,35 @@ def nombre_syllables(mot):
 
     Args:
         mot: string
-
+    
     Returns:
         int
     """
-    liste_voyelle = ["a", "e", "i", "o", "u", "y", "é"]
+    liste_voyelle = ['a', 'e', 'i', 'o', 'u', 'y', 'é']
     num_syl = 1
 
     for i in range(len(mot)):
         if mot[i] not in liste_voyelle:
-            if i - 1 >= 0:
-                if mot[i - 1] in liste_voyelle:
-                    j = i + 1
-                    while j < len(mot):
-                        if (mot[i + 1] == "r" and mot[i] != "r") or (
-                            mot[i + 1] == "l" and mot[i] != "l"
-                        ):
+            if i-1 >= 0:
+                if mot[i-1] in liste_voyelle:
+                    j = i+1
+                    while(j < len(mot)):
+                        if (mot[i+1] == 'r' and mot[i] != 'r') or (mot[i+1] == 'l' and mot[i] != 'l'):
                             break
                         if mot[j] in liste_voyelle:
-                            num_syl = num_syl + 1
+                            num_syl = num_syl+ 1
                             break
                         else:
-                            j = j + 1
+                            j=j+1
     return num_syl
 
-
 if __name__ == "__main__":
-    word = input("Adjectif à ajouté au DB: ")
-    nouvel_adj = wikitionnaire.recup_mot(word)
-    Adjectif = db.table("adjectif")
-    Adjectif.insert(nouvel_adj)
-    # print("Bienvenue au générateur de poème.\n-------------------\n\n")
-    # print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
-    # choix = input()
-    # if choix == "1":
-    #     print(rime_AABB())
-    # if choix == "2":
-    #     print(rime_ABBA())
-    # if choix == "3":
-    #     print(rime_ABAB())
+    print("Bienvenue au générateur de poème.\n-------------------\n\n")
+    print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
+    choix = input()
+    if choix == "1":
+        print(rime_AABB())
+    if choix == "2":
+        print(rime_ABBA())
+    if choix == "3":
+        print(rime_ABAB())

@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from tinydb import TinyDB, Query
 import requests
 
 
@@ -14,7 +15,11 @@ def recup_adjectif(mot):
     soup = BeautifulSoup(page.text, "html.parser")
 
     table_genre_nombre = soup.find(class_="flextable flextable-fr-mfsp")
-    liste_genre_nombre = table_genre_nombre.find_all("tr")
+    try:
+        liste_genre_nombre = table_genre_nombre.find_all("tr")
+    except AttributeError:
+        print("Impossible d'ajouté ce mot: " + mot)
+        return
     try:
         if liste_genre_nombre[1]["class"] == ["flextable-fr-m"]:
             liste_mot = liste_genre_nombre[1].find_all("a")
@@ -67,3 +72,13 @@ def recup_adjectif(mot):
         "fp": {"mot": nom_fp, "nb_syllabes": nom_fp_syllabes, "API": nom_fp_API},
     }
     return nouvel_adj
+
+if __name__ == "__main__":
+    db = TinyDB('db.json')
+    Adjectif = db.table('adjectif')
+    liste_adjectif_ajouté = ['platonique', 'charnel', 'romantique', 'sentimental', 'aimé', 'tendre', 'beau', 'éternel', 'fraternel', 'incoditionnel', 'passionnel', 'fou', 'immodéré']
+    for item in liste_adjectif_ajouté:
+        print('Ajout de ' + item + ' en cours...')
+        nouvel_adj = recup_adjectif(item)
+        Adjectif.insert(nouvel_adj)
+        print(item + ' ajouté!')
