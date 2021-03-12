@@ -19,7 +19,7 @@ def recup_adjectif(mot):
         liste_genre_nombre = table_genre_nombre.find_all("tr")
     except AttributeError:
         print("Impossible d'ajouté ce mot: " + mot)
-        return
+        return None
     try:
         if liste_genre_nombre[1]["class"] == ["flextable-fr-m"]:
             liste_mot = liste_genre_nombre[1].find_all("a")
@@ -80,5 +80,6 @@ if __name__ == "__main__":
     for item in liste_adjectif_ajouté:
         print('Ajout de ' + item + ' en cours...')
         nouvel_adj = recup_adjectif(item)
-        Adjectif.insert(nouvel_adj)
-        print(item + ' ajouté!')
+        if nouvel_adj is not None:
+            Adjectif.insert(nouvel_adj)
+            print(item + ' ajouté!')
