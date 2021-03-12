@@ -213,6 +213,25 @@ def ajouter_adjectif_DB(liste_adjectif):
                 print(item + ' ajouté!')
     db.close()
 
+def ajouter_determinant_DB(liste_determinant):
+    """Ajoute des déterminants au DB
+    
+    Args:
+        liste_determinant (list): Une liste de déterminants.
+    """
+    db = TinyDB('db.json')
+    Determinant = db.table('determinant')
+    for item in liste_determinant:
+        if exist_database(item, Determinant) is True:
+            print(item + ' est déjà dans la base de donnée !')
+        else:
+            print('Ajout de ' + item + ' en cours...')
+            nouveau_det = recup_determinant(item)
+            if nouveau_det is not None:
+                Determinant.insert(nouveau_det)
+                print(item + ' ajouté!')
+    db.close()
+
 def ajouter_nom_DB(liste_nom):
     """Ajoute un adjectif au DB
     
