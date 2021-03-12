@@ -80,21 +80,22 @@ def rime_ABBA():
     )
     return structure_ABBA
 
-def groupe_nominal(dict_nom=None):
+def groupe_nominal(dict_determinant, dict_nom):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
     On détermine le déterminant par la suite et si on ajoute un complément.
 
     Args:
-        dict_nom: Un dictionnaire contenant un nom. Par défaut on choisit un dictionnaire au hasard dans la liste.
+        dict_determinant (dict): Un dictionnaire contenant tous les nombres et genre d'un déterminant.
+        dict_nom (dict): Un dictionnaire contenant un nom et ses attributs.
 
     Returns:
-        Un groupe nominal.
+        groupe_nominal (str): Un groupe nominal.
     """
-    if dict_nom is None:
-        random.seed(random.randrange(99999999))
-        dict_nom = random.choice(liste_nom)
-    noyau = dict_nom["nom"]
-    determinant = nom_vers_determinant(dict_nom)
+    noyau = dict_nom['mot']
+    genre_nombre = dict_nom['genre'] + dict_nom['nombre']
+    dict_determinant = dict_determinant[genre_nombre]
+    determinant = dict_determinant['mot']
+    # Doit vérifier si déterminant est même genre que nom.
     determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     if determinant[-1] == "'":
@@ -200,7 +201,7 @@ def verifier_mot_debute_voyelle(nom, determinant):
     """Retourne un déterminant selon si le mot passé en argument commence par une voyelle
 
     Returns:
-        determinant
+        determinant (str): Un déterminant.
     """
     if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h" or "é"):
         if determinant == "la" or determinant == "le":
@@ -216,10 +217,10 @@ def nom_vers_adjectif(dict_nom):
     """Retourne un adjectif du même genre que le nom.
 
     Args:
-        dict_nom: Un dictionnaire contenant un nom et son genre.
+        dict_nom (dict): Un dictionnaire contenant un nom et son genre.
 
     Returns:
-        Un adjectif du même genre que le nom passé en argument.
+        adjectif (str): Un adjectif du même genre que le nom passé en argument.
     """
     dict_adjectif = random.choice(liste_adjectif)
     for k in dict_adjectif:
@@ -230,14 +231,11 @@ def nom_vers_adjectif(dict_nom):
 def nombre_syllables(mot):
     """Retourne le nombre de syllables dans un mot passé en argument.
 
-    hirondelle
-    hi/ron/del/le
-
     Args:
-        mot: string
+        mot (str): Un mot.
     
     Returns:
-        int
+        num_syl (int): Le nombre de syllables dans le mot.
     """
     liste_voyelle = ['a', 'e', 'i', 'o', 'u', 'y', 'é']
     num_syl = 1
