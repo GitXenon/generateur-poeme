@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
-# ce, mon, ton, son, notre, votre, leur, quel, du, un, aucun, plusieurs, peu de, tout, tel, lequel, auquel, duquel
+# ce, mon, ton, son, notre, votre, leur, quel, du, un, aucun, plusieurs, tout, tel, lequel, auquel, duquel
 
 def recup_determinant(mot):
     """Retourne une entrée complète
@@ -17,6 +17,9 @@ def recup_determinant(mot):
     soup = BeautifulSoup(page.text, "html.parser")
     regex = "(Adjectif|Article)_(défini|indéfini|démonstratif|possessif|interrogatif|exclamatif| partitif|numéral|quantitatif|relatif)"
     title_pronom = soup.find(id=re.compile(regex))
+    if title_pronom == None:
+        print("Mot n'est peut être pas un déterminant.")
+        return None
     table = title_pronom.parent.next_sibling.next_sibling
 
     liste_mot = table.find_all('td')
@@ -63,15 +66,17 @@ def recup_nom(mot):
     url = "https://fr.wiktionary.org/wiki/"
     page = requests.get(url + mot)
     soup = BeautifulSoup(page.text, "html.parser")
+    regex = "Nom_commun\w*"
+    title_nom = soup.find(id=re.compile(regex))
+    if title_nom == None:
+        print("Mot n'est peut être pas un nom.")
+        return None
 
-    table_nombre = soup.find(class_="flextable")
-
-    definition = soup.p
+    definition = title_nom.parent.next_sibling.next_sibling.next_sibling.next_sibling
     if definition.b.text != mot:
         print("Impossible d'ajouté ce mot: " + mot)
         return None
-
-    table = soup.find(class_='flextable')
+    table = title_nom.parent.next_sibling.next_sibling
     liste_mot = table.find_all('td')
     if len(liste_mot) == 1:
         resultat = liste_mot[0].find_all('a')
@@ -83,9 +88,15 @@ def recup_nom(mot):
         nom_p = liste_mot[1].a.text
         nom_API = liste_mot[2].a.text
     else:
+        print(len(liste_mot))
         print("Impossible d'ajouté ce mot: " + mot + ". Problème nombre td.")
         return None
 
+    if definition.i is None:
+        definition = definition.next_sibling.next_sibling
+        if definition.i is None:
+            print("Problème avec ce mot.") #TODO: Fix recup_nom
+            return None
     genre = definition.i.text
     if genre == 'masculin':
         nom_syllabes = nom_API.count(".") + 1
@@ -195,6 +206,24 @@ def exist_database(mot, table):
     else:
         is_in_database = False
     return is_in_database
+
+def exist_database_nom(mot, table):
+    """Retourne true or false is existe déjà dans DB
+
+    Args:
+        mot (str):
+        table (table):
+
+    Returns:
+        is_in_database (bool):
+    """
+    Nom = Query()
+    search_ms = table.search(Nom.mot == mot)
+    if len(search_ms) != 0:
+        is_in_database = True
+    else:
+        is_in_database = False
+    return is_in_database
     
 def ajouter_adjectif_DB(liste_adjectif):
     """Ajoute un adjectif au DB
@@ -243,17 +272,22 @@ def ajouter_nom_DB(liste_nom):
     db = TinyDB('db.json')
     Nom = db.table('nom')
     for item in liste_nom:
-        if exist_database(item, Nom) is True:
+        if exist_database_nom(item, Nom) is True:
             print(item + ' est déjà dans la base de donnée !')
         else:
             print('Ajout de ' + item + ' en cours...')
-            liste_nom = recup_nom(item)
-            if liste_nom is not None:
-                for dict_mot in liste_nom:
+            liste_mot = recup_nom(item)
+            if liste_mot is not None:
+                for dict_mot in liste_mot:
                     Nom.insert(dict_mot)
                     print(item + ' ajouté!')
     db.close()
 
 
 if __name__ == "__main__":
-    pass
+    #liste_det = ["ce", "mon", "ton", "son", "notre", "votre", "leur", "quel", "du", "un", "aucun", "plusieurs", "tout", "tel", "lequel", "auquel", "duquel"]
+    #liste_nom = ["amant", "tendresse", "passion", "amitié", "désir", "cœur", "vie", "amoureux", "bonheur", "philtre", "beauté", "amoureuse", "amante", "couple", "baiser", "sentiment", "joue", "gars", "fille", "poésie", "homme", "sensualité", "plaisir"]
+    #liste_adj = ["amoureux", "platonique", "charnel", "romantique", "sentimentale", "aimé", "tendre", "beau", "éternel", "fraternel", "inconditionnel", "passionnel", "fou", "jeune", "sensuel", "heureux", "divine", "érotique", "conjugal", "intime", "douce", "fusionnel"]
+    #ajouter_determinant_DB(liste_det)
+    #ajouter_adjectif_DB(liste_adj)
+    ajouter_nom_DB(['jeu'])
