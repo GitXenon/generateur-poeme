@@ -71,12 +71,19 @@ def recup_nom(mot):
     if title_nom == None:
         print("Mot n'est peut être pas un nom.")
         return None
+    title_nom = title_nom.parent
 
-    definition = title_nom.parent.next_sibling.next_sibling.next_sibling.next_sibling
+    # On vérifie 
+    definition = title_nom
+    while definition.name != 'p':
+        definition = definition.next_sibling
     if definition.b.text != mot:
         print("Impossible d'ajouté ce mot: " + mot)
         return None
-    table = title_nom.parent.next_sibling.next_sibling
+    
+    table = title_nom
+    while table.name != 'table':
+        table = table.next_sibling
     liste_mot = table.find_all('td')
     if len(liste_mot) == 1:
         resultat = liste_mot[0].find_all('a')
@@ -263,31 +270,38 @@ def ajouter_determinant_DB(liste_determinant):
                 print(item + ' ajouté!')
     db.close()
 
-def ajouter_nom_DB(liste_nom):
+def ajouter_nom_DB(nom_a_ajouter):
     """Ajoute un adjectif au DB
     
     Args:
-        liste_adjectif (list): Une liste de noms.
+        nom_a_ajouter (str): Un nom à ajouter dans la DB.
+
+    Returns:
+        ajouter_dans_db (bool): true or false
     """
     db = TinyDB('db.json')
     Nom = db.table('nom')
-    for item in liste_nom:
-        if exist_database_nom(item, Nom) is True:
-            print(item + ' est déjà dans la base de donnée !')
-        else:
-            print('Ajout de ' + item + ' en cours...')
-            liste_mot = recup_nom(item)
-            if liste_mot is not None:
-                for dict_mot in liste_mot:
-                    Nom.insert(dict_mot)
-                    print(item + ' ajouté!')
+    if exist_database_nom(nom_a_ajouter, Nom) is True:
+        print(nom_a_ajouter + ' est déjà dans la base de donnée !')
+        ajouter_dans_db = False 
+    else:
+        print('Ajout de ' + nom_a_ajouter + ' en cours...')
+        liste_mot = recup_nom(nom_a_ajouter)
+        if liste_mot is not None:
+            for dict_mot in liste_mot:
+                #Nom.insert(dict_mot)
+                ajouter_dans_db = True
+        elif liste_mot is None:
+            ajouter_dans_db = False
     db.close()
+    return ajouter_dans_db
 
 
 if __name__ == "__main__":
     #liste_det = ["ce", "mon", "ton", "son", "notre", "votre", "leur", "quel", "du", "un", "aucun", "plusieurs", "tout", "tel", "lequel", "auquel", "duquel"]
-    #liste_nom = ["amant", "tendresse", "passion", "amitié", "désir", "cœur", "vie", "amoureux", "bonheur", "philtre", "beauté", "amoureuse", "amante", "couple", "baiser", "sentiment", "joue", "gars", "fille", "poésie", "homme", "sensualité", "plaisir"]
+    liste_nom = ["amant", "tendresse", "passion", "amitié", "désir", "cœur", "vie", "amoureux", "bonheur", "philtre", "beauté", "amoureuse", "amante", "couple", "baiser", "sentiment", "joue", "gars", "fille", "poésie", "homme", "sensualité", "plaisir"]
     #liste_adj = ["amoureux", "platonique", "charnel", "romantique", "sentimentale", "aimé", "tendre", "beau", "éternel", "fraternel", "inconditionnel", "passionnel", "fou", "jeune", "sensuel", "heureux", "divine", "érotique", "conjugal", "intime", "douce", "fusionnel"]
     #ajouter_determinant_DB(liste_det)
     #ajouter_adjectif_DB(liste_adj)
-    ajouter_nom_DB(['jeu'])
+    for item in liste_nom:
+        ajouter_nom_DB(item)
