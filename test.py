@@ -150,6 +150,57 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(dict_det["fs"]["API"], "\\la\\")
         self.assertEqual(dict_det["fp"]["API"], "\\le\\")
 
+    def test_recup_determinant_2(self):
+        dict_det = wikitionnaire.recup_determinant("ce")
+        self.assertEqual(dict_det["ms"]["mot"], "ce")
+        self.assertEqual(dict_det["mp"]["mot"], "ces")
+        self.assertEqual(dict_det["fs"]["mot"], "cette")
+        self.assertEqual(dict_det["fp"]["mot"], "ces")
+
+        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+
+        self.assertEqual(dict_det["ms"]["API"], "\\sə\\")
+        self.assertEqual(dict_det["mp"]["API"], "\\se\\")
+        self.assertEqual(dict_det["fs"]["API"], "\\sɛt\\")
+        self.assertEqual(dict_det["fp"]["API"], "\\se\\")
+
+    def test_recup_determinant_3(self):
+        dict_det = wikitionnaire.recup_determinant("mon")
+        self.assertEqual(dict_det["ms"]["mot"], "mon")
+        self.assertEqual(dict_det["mp"]["mot"], "mes")
+        self.assertEqual(dict_det["fs"]["mot"], "ma")
+        self.assertEqual(dict_det["fp"]["mot"], "mes")
+
+        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+
+        self.assertEqual(dict_det["ms"]["API"], "\\mɔ̃\\")
+        self.assertEqual(dict_det["mp"]["API"], "\\mɛ\\")
+        self.assertEqual(dict_det["fs"]["API"], "\\ma\\")
+        self.assertEqual(dict_det["fp"]["API"], "\\mɛ\\")
+
+    def test_recup_determinant_4(self):
+        dict_det = wikitionnaire.recup_determinant("aucun")
+        self.assertEqual(dict_det["ms"]["mot"], "aucun")
+        self.assertEqual(dict_det["mp"]["mot"], "aucuns")
+        self.assertEqual(dict_det["fs"]["mot"], "aucune")
+        self.assertEqual(dict_det["fp"]["mot"], "aucunes")
+
+        self.assertEqual(dict_det["ms"]["nb_syllabes"], 2)
+        self.assertEqual(dict_det["mp"]["nb_syllabes"], 2)
+        self.assertEqual(dict_det["fs"]["nb_syllabes"], 2)
+        self.assertEqual(dict_det["fp"]["nb_syllabes"], 2)
+
+        self.assertEqual(dict_det["ms"]["API"], "\\o.kœ̃\\")
+        self.assertEqual(dict_det["mp"]["API"], "\\o.kœ̃\\")
+        self.assertEqual(dict_det["fs"]["API"], "\\o.kyn\\")
+        self.assertEqual(dict_det["fp"]["API"], "\\o.kyn\\")
+
 class TestGroupe(unittest.TestCase):
 
     def setUp(self):

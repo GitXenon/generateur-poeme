@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
+# ce, mon, ton, son, notre, votre, leur, quel, du, un, aucun, plusieurs, peu de, tout, tel, lequel, auquel, duquel
+
 def recup_determinant(mot):
     """Retourne une entrée complète
 
@@ -13,8 +15,8 @@ def recup_determinant(mot):
     url = "https://fr.wiktionary.org/wiki/"
     page = requests.get(url + mot)
     soup = BeautifulSoup(page.text, "html.parser")
-
-    title_pronom = soup.find(id=re.compile('Article\w*'))
+    regex = "(Adjectif|Article)_(défini|indéfini|démonstratif|possessif|interrogatif|exclamatif| partitif|numéral|quantitatif|relatif)"
+    title_pronom = soup.find(id=re.compile(regex))
     table = title_pronom.parent.next_sibling.next_sibling
 
     liste_mot = table.find_all('td')
