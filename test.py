@@ -1,6 +1,8 @@
 import unittest
+import tempfile
 
 from tinydb import TinyDB, Query
+from tinydb.storages import MemoryStorage
 
 from main import nombre_syllables, groupe_nominal
 import wikitionnaire
@@ -232,6 +234,19 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(dict_det["mp"]["API"], "\\o.kœ̃\\")
         self.assertEqual(dict_det["fs"]["API"], "\\o.kyn\\")
         self.assertEqual(dict_det["fp"]["API"], "\\o.kyn\\")
+
+class TestDatabase(unittest.TestCase):
+    
+    def setUp(self):
+        # DB temporaire dans la mémoire pour le temps des tests
+        self.db = TinyDB(storage=MemoryStorage)
+        self.User = Query()
+    
+    def test_1(self):
+        # Example de test
+        self.db.insert({'name': 'John', 'age': 22})
+        req = self.db.search(self.User.name == 'John')
+        self.assertEqual(req, [{'name': 'John', 'age': 22}])
 
 
 if __name__ == "__main__":
