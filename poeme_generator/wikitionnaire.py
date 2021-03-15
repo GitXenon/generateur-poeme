@@ -1,9 +1,11 @@
 import re
+import logging
 
 from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
+logging.basicConfig(level=logging.DEBUG)
 
 def recup_determinant(mot):
     """Retourne une entrée complète
@@ -20,7 +22,7 @@ def recup_determinant(mot):
     regex = "(Adjectif|Article)_(défini|indéfini|démonstratif|possessif|interrogatif|exclamatif|partitif|numéral|quantitatif|relatif)"
     title_pronom = soup.find(id=re.compile(regex))
     if title_pronom == None:
-        print("Mot n'est peut être pas un déterminant.")
+        logging.error("Mot n'est peut être pas un déterminant.")
         return None
     table = title_pronom.parent.next_sibling.next_sibling
 
@@ -51,10 +53,10 @@ def recup_determinant(mot):
             "fp": {"mot": det_fp, "nb_syllabes": det_ms_syllabes, "API": det_fp_API},
         }
     elif len(liste_mot) == 4:
-        print("PAS ENCORE IMPLÉMENTER !!!")
+        logging.error("PAS ENCORE IMPLÉMENTER !!!")
         return None
     else:
-        print("Impossible d'ajouté ce mot: " + mot + ". Problème !!!!")
+        logging.error("Impossible d'ajouté ce mot: " + mot + ". Problème !!!!")
         return None
 
     return dict_det
@@ -75,7 +77,7 @@ def recup_nom(mot):
     regex = "Nom_commun\w*"
     title_nom = soup.find(id=re.compile(regex))
     if title_nom == None:
-        print("Mot n'est peut être pas un nom.")
+        logging.error("Mot n'est peut être pas un nom.")
         return None
     title_nom = title_nom.parent
 
@@ -84,7 +86,7 @@ def recup_nom(mot):
         # On passe au prochain sibling jusqu'à atteindre une classe html 'p'
         definition = definition.next_sibling
     if definition.b.text != mot:
-        print("Impossible d'ajouté ce mot: " + mot)
+        logging.error("Impossible d'ajouté ce mot: " + mot)
         return None
 
     table = title_nom
@@ -101,14 +103,13 @@ def recup_nom(mot):
         nom_p = liste_mot[1].a.text
         nom_API = liste_mot[2].a.text
     else:
-        print(len(liste_mot))
-        print("Impossible d'ajouté ce mot: " + mot + ". Problème nombre td.")
+        logging.error("Impossible d'ajouté ce mot: " + mot + ". Problème nombre td.")
         return None
 
     if definition.i is None:
         definition = definition.next_sibling.next_sibling
         if definition.i is None:
-            print("Problème avec ce mot.")  # TODO: Fix recup_nom
+            logging.error("Problème avec ce mot.")  # TODO: Fix recup_nom
             return None
     genre = definition.i.text
     if genre == "masculin":
@@ -148,7 +149,7 @@ def recup_nom(mot):
             },
         ]
     else:
-        print("Problème de genre avec ce mot: " + mot)
+        logging.error("Problème de genre avec ce mot: " + mot)
         return None
 
     return nouveau_nom
@@ -172,7 +173,7 @@ def recup_adjectif(mot):
     try:
         liste_genre_nombre = table_genre_nombre.find_all("tr")
     except AttributeError:
-        print("Impossible d'ajouté ce mot: " + mot)
+        logging.error("Impossible d'ajouté ce mot: " + mot)
         return None
     try:
         if liste_genre_nombre[1]["class"] == ["flextable-fr-m"]:
@@ -270,13 +271,13 @@ def ajouter_adjectif_DB(liste_adjectif):
     Adjectif = db.table("adjectif")
     for item in liste_adjectif:
         if existe_dans_DB(item, Adjectif) is True:
-            print(item + " est déjà dans la base de donnée !")
+            logging.info(item + " est déjà dans la base de donnée !")
         else:
-            print("Ajout de " + item + " en cours...")
+            logging.info("Ajout de " + item + " en cours...")
             nouvel_adj = recup_adjectif(item)
             if nouvel_adj is not None:
                 Adjectif.insert(nouvel_adj)
-                print(item + " ajouté!")
+                prlogging.infoint(item + " ajouté!")
     db.close()
 
 
@@ -290,13 +291,13 @@ def ajouter_determinant_DB(liste_determinant):
     Determinant = db.table("determinant")
     for item in liste_determinant:
         if existe_dans_DB(item, Determinant) is True:
-            print(item + " est déjà dans la base de donnée !")
+            logging.info(item + " est déjà dans la base de donnée !")
         else:
-            print("Ajout de " + item + " en cours...")
+            logging.info("Ajout de " + item + " en cours...")
             nouveau_det = recup_determinant(item)
             if nouveau_det is not None:
                 Determinant.insert(nouveau_det)
-                print(item + " ajouté!")
+                logging.info(item + " ajouté!")
     db.close()
 
 
@@ -312,14 +313,14 @@ def ajouter_nom_DB(nom_a_ajouter):
     db = TinyDB("db.json")
     Nom = db.table("nom")
     if existe_dans_DB(nom_a_ajouter, Nom) is True:
-        print(nom_a_ajouter + " est déjà dans la base de donnée !")
+        logging.info(nom_a_ajouter + " est déjà dans la base de donnée !")
         ajouter_dans_db = False
     else:
-        print("Ajout de " + nom_a_ajouter + " en cours...")
+        logging.info("Ajout de " + nom_a_ajouter + " en cours...")
         liste_mot = recup_nom(nom_a_ajouter)
         if liste_mot is not None:
             for dict_mot in liste_mot:
-                # Nom.insert(dict_mot)
+                Nom.insert(dict_mot)
                 ajouter_dans_db = True
         elif liste_mot is None:
             ajouter_dans_db = False
@@ -328,6 +329,7 @@ def ajouter_nom_DB(nom_a_ajouter):
 
 
 if __name__ == "__main__":
-    liste_nom = []
-    for item in liste_nom:
-        ajouter_nom_DB(item)
+    pass
+    # liste_nom = []
+    # for item in liste_nom:
+    #     ajouter_nom_DB(item)
