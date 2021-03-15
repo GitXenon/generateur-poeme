@@ -233,30 +233,6 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(dict_det["fs"]["API"], "\\o.kyn\\")
         self.assertEqual(dict_det["fp"]["API"], "\\o.kyn\\")
 
-class TestGroupe(unittest.TestCase):
-
-    def setUp(self):
-        self.db = TinyDB('db.json')
-
-    def test_groupe_nominal_1(self):
-        Nom = self.db.table('nom')
-        Determinant = self.db.table('determinant')
-        dict_nom = Nom.all()[0] # mot: amour
-        dict_determinant = Determinant.all()[0] # mot: le/la/les
-        gn = groupe_nominal(dict_determinant, dict_nom)
-        self.assertEqual(gn, "l'amour")
-        self.db.close()
-    
-    def test_groupe_nominal_2(self):
-        Nom = self.db.table('nom')
-        Determinant = self.db.table('determinant')
-        dict_nom = Nom.all()[6] # mot: désir
-        dict_determinant = Determinant.all()[2] # mot: ton/ta/tes
-        gn = groupe_nominal(dict_determinant, dict_nom)
-        print(gn)
-        self.assertEqual(gn, "ton désir")
-        self.db.close()
-
 
 if __name__ == "__main__":
     unittest.main()
