@@ -4,10 +4,12 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
-# ce, mon, ton, son, notre, votre, leur, quel, du, un, aucun, plusieurs, tout, tel, lequel, auquel, duquel
 
 def recup_determinant(mot):
     """Retourne une entrée complète
+
+    Args:
+        mot (str): le mot à récupérer.
 
     Returns:
         dict_det (dict): Dictionnaires avec le déterminant à ajouter au DB
@@ -15,19 +17,19 @@ def recup_determinant(mot):
     url = "https://fr.wiktionary.org/wiki/"
     page = requests.get(url + mot)
     soup = BeautifulSoup(page.text, "html.parser")
-    regex = "(Adjectif|Article)_(défini|indéfini|démonstratif|possessif|interrogatif|exclamatif| partitif|numéral|quantitatif|relatif)"
+    regex = "(Adjectif|Article)_(défini|indéfini|démonstratif|possessif|interrogatif|exclamatif|partitif|numéral|quantitatif|relatif)"
     title_pronom = soup.find(id=re.compile(regex))
     if title_pronom == None:
         print("Mot n'est peut être pas un déterminant.")
         return None
     table = title_pronom.parent.next_sibling.next_sibling
 
-    liste_mot = table.find_all('td')
+    liste_mot = table.find_all("td")
     if len(liste_mot) == 5:
-        premier_td = liste_mot[1].find_all('a')
-        deuxieme_td = liste_mot[2].find_all('a')
-        troisieme_td = liste_mot[3].find_all('a')
-        quatrieme_td = liste_mot[4].find_all('a')
+        premier_td = liste_mot[1].find_all("a")
+        deuxieme_td = liste_mot[2].find_all("a")
+        troisieme_td = liste_mot[3].find_all("a")
+        quatrieme_td = liste_mot[4].find_all("a")
         det_ms = premier_td[0].text
         det_ms_API = premier_td[1].text
         det_mp = deuxieme_td[0].text
@@ -41,12 +43,12 @@ def recup_determinant(mot):
         det_mp_syllabes = det_mp_API.count(".") + 1
         det_fs_syllabes = det_fs_API.count(".") + 1
         det_fp_syllabes = det_fp_API.count(".") + 1
-        
+
         dict_det = {
-            'ms': {"mot": det_ms, "nb_syllabes": det_ms_syllabes, "API": det_ms_API},
-            'mp': {"mot": det_mp, "nb_syllabes": det_ms_syllabes, "API": det_mp_API},
-            'fs': {"mot": det_fs, "nb_syllabes": det_ms_syllabes, "API": det_fs_API},
-            'fp': {"mot": det_fp, "nb_syllabes": det_ms_syllabes, "API": det_fp_API}
+            "ms": {"mot": det_ms, "nb_syllabes": det_ms_syllabes, "API": det_ms_API},
+            "mp": {"mot": det_mp, "nb_syllabes": det_ms_syllabes, "API": det_mp_API},
+            "fs": {"mot": det_fs, "nb_syllabes": det_ms_syllabes, "API": det_fs_API},
+            "fp": {"mot": det_fp, "nb_syllabes": det_ms_syllabes, "API": det_fp_API},
         }
     elif len(liste_mot) == 4:
         print("PAS ENCORE IMPLÉMENTER !!!")
@@ -57,8 +59,12 @@ def recup_determinant(mot):
 
     return dict_det
 
+
 def recup_nom(mot):
     """Retourne une entrée complète
+
+    Args:
+        mot (str): le mot à récupérer.
 
     Returns:
         nouveau_nom (liste): Liste de dictionnaires avec le nom pour ajouter au DB
@@ -73,20 +79,20 @@ def recup_nom(mot):
         return None
     title_nom = title_nom.parent
 
-    # On vérifie 
+    # On vérifie
     definition = title_nom
-    while definition.name != 'p':
+    while definition.name != "p":
         definition = definition.next_sibling
     if definition.b.text != mot:
         print("Impossible d'ajouté ce mot: " + mot)
         return None
-    
+
     table = title_nom
-    while table.name != 'table':
+    while table.name != "table":
         table = table.next_sibling
-    liste_mot = table.find_all('td')
+    liste_mot = table.find_all("td")
     if len(liste_mot) == 1:
-        resultat = liste_mot[0].find_all('a')
+        resultat = liste_mot[0].find_all("a")
         nom_s = resultat[0].text.rstrip()
         nom_p = nom_s
         nom_API = resultat[1].text
@@ -102,29 +108,57 @@ def recup_nom(mot):
     if definition.i is None:
         definition = definition.next_sibling.next_sibling
         if definition.i is None:
-            print("Problème avec ce mot.") #TODO: Fix recup_nom
+            print("Problème avec ce mot.")  # TODO: Fix recup_nom
             return None
     genre = definition.i.text
-    if genre == 'masculin':
+    if genre == "masculin":
         nom_syllabes = nom_API.count(".") + 1
         nouveau_nom = [
-            {"mot": nom_s, "nb_syllabes": nom_syllabes,"genre":"m","nombre":"s","API": nom_API},
-            {"mot": nom_p, "nb_syllabes": nom_syllabes,"genre":"m","nombre":"p","API": nom_API}
-            ]
-    elif genre == 'féminin':
+            {
+                "mot": nom_s,
+                "nb_syllabes": nom_syllabes,
+                "genre": "m",
+                "nombre": "s",
+                "API": nom_API,
+            },
+            {
+                "mot": nom_p,
+                "nb_syllabes": nom_syllabes,
+                "genre": "m",
+                "nombre": "p",
+                "API": nom_API,
+            },
+        ]
+    elif genre == "féminin":
         nom_syllabes = nom_API.count(".") + 1
         nouveau_nom = [
-            {"mot": nom_s, "nb_syllabes": nom_syllabes,"genre":"f","nombre":"s","API": nom_API},
-            {"mot": nom_p, "nb_syllabes": nom_syllabes,"genre":"f","nombre":"p","API": nom_API}
-            ]
+            {
+                "mot": nom_s,
+                "nb_syllabes": nom_syllabes,
+                "genre": "f",
+                "nombre": "s",
+                "API": nom_API,
+            },
+            {
+                "mot": nom_p,
+                "nb_syllabes": nom_syllabes,
+                "genre": "f",
+                "nombre": "p",
+                "API": nom_API,
+            },
+        ]
     else:
-        print('Problème de genre avec ce mot: ' + mot)
+        print("Problème de genre avec ce mot: " + mot)
         return None
 
     return nouveau_nom
 
+
 def recup_adjectif(mot):
     """Retourne une entrée complète
+
+    Args:
+        mot (str): le mot à récupérer.
 
     Returns:
         nouvel_adj (dict): Dictionnaire avec l'adjectif pour ajouter au DB
@@ -193,18 +227,19 @@ def recup_adjectif(mot):
     }
     return nouvel_adj
 
+
 def existe_dans_DB(mot, table):
     """Retourne true or false is existe déjà dans DB. Fonctionne avec déterminant et adjectif.
 
     Args:
-        mot (str):
-        table (table):
+        mot (str): Un mot.
+        table (table): Une table dans la TinyDB où chercher le mot.
 
     Returns:
-        is_in_database (bool):
+        is_in_database (bool): true or false.
     """
 
-    if table.name == 'nom':
+    if table.name == "nom":
         Nom = Query()
         search_ms = table.search(Nom.mot == mot)
         if len(search_ms) != 0:
@@ -224,64 +259,67 @@ def existe_dans_DB(mot, table):
 
     return is_in_database
 
+
 def ajouter_adjectif_DB(liste_adjectif):
     """Ajoute un adjectif au DB
-    
+
     Args:
         liste_adjectif (list): Une liste d'adjectifs.
     """
-    db = TinyDB('db.json')
-    Adjectif = db.table('adjectif')
+    db = TinyDB("db.json")
+    Adjectif = db.table("adjectif")
     for item in liste_adjectif:
         if existe_dans_DB(item, Adjectif) is True:
-            print(item + ' est déjà dans la base de donnée !')
+            print(item + " est déjà dans la base de donnée !")
         else:
-            print('Ajout de ' + item + ' en cours...')
+            print("Ajout de " + item + " en cours...")
             nouvel_adj = recup_adjectif(item)
             if nouvel_adj is not None:
                 Adjectif.insert(nouvel_adj)
-                print(item + ' ajouté!')
+                print(item + " ajouté!")
     db.close()
+
 
 def ajouter_determinant_DB(liste_determinant):
     """Ajoute des déterminants au DB
-    
+
     Args:
         liste_determinant (list): Une liste de déterminants.
     """
-    db = TinyDB('db.json')
-    Determinant = db.table('determinant')
+    db = TinyDB("db.json")
+    Determinant = db.table("determinant")
     for item in liste_determinant:
         if existe_dans_DB(item, Determinant) is True:
-            print(item + ' est déjà dans la base de donnée !')
+            print(item + " est déjà dans la base de donnée !")
         else:
-            print('Ajout de ' + item + ' en cours...')
+            print("Ajout de " + item + " en cours...")
             nouveau_det = recup_determinant(item)
             if nouveau_det is not None:
                 Determinant.insert(nouveau_det)
-                print(item + ' ajouté!')
+                print(item + " ajouté!")
     db.close()
+
 
 def ajouter_nom_DB(nom_a_ajouter):
     """Ajoute un adjectif au DB
-    
+
     Args:
         nom_a_ajouter (str): Un nom à ajouter dans la DB.
 
     Returns:
         ajouter_dans_db (bool): true or false
     """
-    db = TinyDB('db.json')
-    Nom = db.table('nom')
+    db = TinyDB("db.json")
+    Nom = db.table("nom")
     if existe_dans_DB(nom_a_ajouter, Nom) is True:
-        print(nom_a_ajouter + ' est déjà dans la base de donnée !')
-        ajouter_dans_db = False 
+        print(nom_a_ajouter + " est déjà dans la base de donnée !")
+        ajouter_dans_db = False
     else:
-        print('Ajout de ' + nom_a_ajouter + ' en cours...')
+        print("Ajout de " + nom_a_ajouter + " en cours...")
         liste_mot = recup_nom(nom_a_ajouter)
         if liste_mot is not None:
             for dict_mot in liste_mot:
-                #Nom.insert(dict_mot)
+                # Nom.insert(dict_mot)
                 ajouter_dans_db = True
         elif liste_mot is None:
             ajouter_dans_db = False
@@ -290,10 +328,6 @@ def ajouter_nom_DB(nom_a_ajouter):
 
 
 if __name__ == "__main__":
-    #liste_det = ["ce", "mon", "ton", "son", "notre", "votre", "leur", "quel", "du", "un", "aucun", "plusieurs", "tout", "tel", "lequel", "auquel", "duquel"]
-    liste_nom = ["amant", "tendresse", "passion", "amitié", "désir", "cœur", "vie", "amoureux", "bonheur", "philtre", "beauté", "amoureuse", "amante", "couple", "baiser", "sentiment", "joue", "gars", "fille", "poésie", "homme", "sensualité", "plaisir"]
-    #liste_adj = ["amoureux", "platonique", "charnel", "romantique", "sentimentale", "aimé", "tendre", "beau", "éternel", "fraternel", "inconditionnel", "passionnel", "fou", "jeune", "sensuel", "heureux", "divine", "érotique", "conjugal", "intime", "douce", "fusionnel"]
-    #ajouter_determinant_DB(liste_det)
-    #ajouter_adjectif_DB(liste_adj)
+    liste_nom = []
     for item in liste_nom:
         ajouter_nom_DB(item)
