@@ -193,8 +193,8 @@ def recup_adjectif(mot):
     }
     return nouvel_adj
 
-def exist_database(mot, table):
-    """Retourne true or false is existe déjà dans DB
+def existe_dans_DB(mot, table):
+    """Retourne true or false is existe déjà dans DB. Fonctionne avec déterminant et adjectif.
 
     Args:
         mot (str):
@@ -203,35 +203,27 @@ def exist_database(mot, table):
     Returns:
         is_in_database (bool):
     """
-    Nom = Query()
-    search_ms = table.search(Nom.ms.mot == mot)
-    search_mp = table.search(Nom.mp.mot == mot)
-    search_fs = table.search(Nom.fs.mot == mot)
-    search_fp = table.search(Nom.fp.mot == mot)
-    if (len(search_ms) or len(search_mp) or len(search_fs) or len(search_fp)) != 0:
-        is_in_database = True
+
+    if table.name == 'nom':
+        Nom = Query()
+        search_ms = table.search(Nom.mot == mot)
+        if len(search_ms) != 0:
+            is_in_database = True
+        else:
+            is_in_database = False
     else:
-        is_in_database = False
+        Nom = Query()
+        search_ms = table.search(Nom.ms.mot == mot)
+        search_mp = table.search(Nom.mp.mot == mot)
+        search_fs = table.search(Nom.fs.mot == mot)
+        search_fp = table.search(Nom.fp.mot == mot)
+        if (len(search_ms) or len(search_mp) or len(search_fs) or len(search_fp)) != 0:
+            is_in_database = True
+        else:
+            is_in_database = False
+
     return is_in_database
 
-def exist_database_nom(mot, table):
-    """Retourne true or false is existe déjà dans DB
-
-    Args:
-        mot (str):
-        table (table):
-
-    Returns:
-        is_in_database (bool):
-    """
-    Nom = Query()
-    search_ms = table.search(Nom.mot == mot)
-    if len(search_ms) != 0:
-        is_in_database = True
-    else:
-        is_in_database = False
-    return is_in_database
-    
 def ajouter_adjectif_DB(liste_adjectif):
     """Ajoute un adjectif au DB
     
@@ -241,7 +233,7 @@ def ajouter_adjectif_DB(liste_adjectif):
     db = TinyDB('db.json')
     Adjectif = db.table('adjectif')
     for item in liste_adjectif:
-        if exist_database(item, Adjectif) is True:
+        if existe_dans_DB(item, Adjectif) is True:
             print(item + ' est déjà dans la base de donnée !')
         else:
             print('Ajout de ' + item + ' en cours...')
@@ -260,7 +252,7 @@ def ajouter_determinant_DB(liste_determinant):
     db = TinyDB('db.json')
     Determinant = db.table('determinant')
     for item in liste_determinant:
-        if exist_database(item, Determinant) is True:
+        if existe_dans_DB(item, Determinant) is True:
             print(item + ' est déjà dans la base de donnée !')
         else:
             print('Ajout de ' + item + ' en cours...')
@@ -281,7 +273,7 @@ def ajouter_nom_DB(nom_a_ajouter):
     """
     db = TinyDB('db.json')
     Nom = db.table('nom')
-    if exist_database_nom(nom_a_ajouter, Nom) is True:
+    if existe_dans_DB(nom_a_ajouter, Nom) is True:
         print(nom_a_ajouter + ' est déjà dans la base de donnée !')
         ajouter_dans_db = False 
     else:
