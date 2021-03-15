@@ -79,9 +79,9 @@ def recup_nom(mot):
         return None
     title_nom = title_nom.parent
 
-    # On vérifie
     definition = title_nom
     while definition.name != "p":
+        # On passe au prochain sibling jusqu'à atteindre une classe html 'p'
         definition = definition.next_sibling
     if definition.b.text != mot:
         print("Impossible d'ajouté ce mot: " + mot)

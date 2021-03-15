@@ -2,11 +2,11 @@ import random
 
 from tinydb import TinyDB, Query
 
-from wikitionnaire import recup_adjectif
+from . import wikitionnaire
 
 db = TinyDB('db.json')
 
-# Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
+#TODO: Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
 
 def initiation_rime():
     """Initie une liste de mots rimant pour être utilisée dans un poème.
@@ -33,7 +33,6 @@ def initiation_rime():
     deuxieme_B = random.choice(liste_nom_rimant_B)
 
     return premier_A, deuxieme_A, premier_B, deuxieme_B
-
 
 def rime_AABB():
     """Retourne un poème avec la structure de rime AABB
@@ -158,7 +157,6 @@ def groupe_verbal_avec_preposition(Gn=None):
     groupe_verbal = groupe_verbal.capitalize()
     return groupe_verbal
 
-
 def groupe_pronom():
     """Création d'un pronom
 
@@ -180,7 +178,6 @@ def groupe_prepositionnel():
     groupe_prepositionnel = "{} {}".format(preposition, gn)
     return groupe_prepositionnel
 
-
 def nom_vers_determinant(dict_nom):
     """Retourne un déterminant du même genre que le nom.
 
@@ -196,7 +193,6 @@ def nom_vers_determinant(dict_nom):
             determinant = dict_determinant[k]
     return determinant
 
-
 def verifier_mot_debute_voyelle(nom, determinant):
     """Retourne un déterminant selon si le mot passé en argument commence par une voyelle
 
@@ -211,7 +207,6 @@ def verifier_mot_debute_voyelle(nom, determinant):
         if determinant == "ma":
             determinant = "mon"
     return determinant
-
 
 def nom_vers_adjectif(dict_nom):
     """Retourne un adjectif du même genre que le nom.
