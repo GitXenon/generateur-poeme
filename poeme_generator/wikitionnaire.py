@@ -261,71 +261,41 @@ def existe_dans_DB(mot, table):
     return is_in_database
 
 
-def ajouter_adjectif_DB(liste_adjectif):
-    """Ajoute un adjectif au DB
+def ajouter_dans_DB(mot_a_ajouter, categorie_mot):
+    """Une fonction pour ajouter un mot dans la base de donnée.
 
     Args:
-        liste_adjectif (list): Une liste d'adjectifs.
+        mot_a_ajouter (str): Un mot.
+        categorie_mot (str): La catégorie ('déterminant', 'nom', etc.) que mot_a_ajouter appartient.
     """
-    db = TinyDB("db.json")
-    Adjectif = db.table("adjectif")
-    for item in liste_adjectif:
-        if existe_dans_DB(item, Adjectif) is True:
-            logging.info(item + " est déjà dans la base de donnée !")
-        else:
-            logging.info("Ajout de " + item + " en cours...")
-            nouvel_adj = recup_adjectif(item)
-            if nouvel_adj is not None:
-                Adjectif.insert(nouvel_adj)
-                prlogging.infoint(item + " ajouté!")
-    db.close()
+    db = TinyDB('db.json')
 
+    if categorie_mot == 'nom':
+        Table_categorie = db.table('nom')
+    elif categorie_mot == 'determinant':
+        Table_categorie = db.table('determinant')
+    elif categorie_mot == 'adjectif':
+        Table_categorie = db.table('adjectif')
 
-def ajouter_determinant_DB(liste_determinant):
-    """Ajoute des déterminants au DB
-
-    Args:
-        liste_determinant (list): Une liste de déterminants.
-    """
-    db = TinyDB("db.json")
-    Determinant = db.table("determinant")
-    for item in liste_determinant:
-        if existe_dans_DB(item, Determinant) is True:
-            logging.info(item + " est déjà dans la base de donnée !")
-        else:
-            logging.info("Ajout de " + item + " en cours...")
-            nouveau_det = recup_determinant(item)
-            if nouveau_det is not None:
-                Determinant.insert(nouveau_det)
-                logging.info(item + " ajouté!")
-    db.close()
-
-
-def ajouter_nom_DB(nom_a_ajouter):
-    """Ajoute un adjectif au DB
-
-    Args:
-        nom_a_ajouter (str): Un nom à ajouter dans la DB.
-
-    Returns:
-        ajouter_dans_db (bool): true or false
-    """
-    db = TinyDB("db.json")
-    Nom = db.table("nom")
-    if existe_dans_DB(nom_a_ajouter, Nom) is True:
-        logging.info(nom_a_ajouter + " est déjà dans la base de donnée !")
-        ajouter_dans_db = False
+    if existe_dans_DB(mot_a_ajouter, Table_categorie):
+        logging.info(mot_a_ajouter + " est déjà dans la base de donnée !")
     else:
-        logging.info("Ajout de " + nom_a_ajouter + " en cours...")
-        liste_mot = recup_nom(nom_a_ajouter)
-        if liste_mot is not None:
-            for dict_mot in liste_mot:
-                Nom.insert(dict_mot)
-                ajouter_dans_db = True
-        elif liste_mot is None:
-            ajouter_dans_db = False
+        logging.info("Ajout de " + mot_a_ajouter + " en cours...")
+
+        if categorie_mot == 'nom':
+            dict_a_ajouter = recup_nom(mot_a_ajouter)
+        elif categorie_mot == 'determinant':
+            dict_a_ajouter = recup_determinant(mot_a_ajouter)
+        elif categorie_mot == 'adjectif':
+            dict_a_ajouter = recup_adjectif(mot_a_ajouter)
+        if dict_a_ajouter is not None:
+            if categorie_mot == 'nom': 
+                for dict_nom in dict_a_ajouter:
+                    Table_categorie.insert(dict_nom)
+            else:
+                Table_categorie.insert(dict_a_ajouter)
+
     db.close()
-    return ajouter_dans_db
 
 
 if __name__ == "__main__":
