@@ -133,6 +133,38 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[0]["API"], "\\tɑ̃.dʁɛs\\")
         self.assertEqual(nouveau_nom[1]["API"], "\\tɑ̃.dʁɛs\\")
 
+    def test_recup_nom_4(self):
+        nouveau_nom = wikitionnaire.recup_nom("vie")
+        self.assertEqual(nouveau_nom[0]["mot"], "vie")
+        self.assertEqual(nouveau_nom[1]["mot"], "vies")
+
+        self.assertEqual(nouveau_nom[0]["genre"], "f")
+        self.assertEqual(nouveau_nom[0]["nombre"], "s")
+        self.assertEqual(nouveau_nom[1]["genre"], "f")
+        self.assertEqual(nouveau_nom[1]["nombre"], "p")
+
+        self.assertEqual(nouveau_nom[0]["nb_syllabes"], 1)
+        self.assertEqual(nouveau_nom[1]["nb_syllabes"], 1)
+
+        self.assertEqual(nouveau_nom[0]["API"], "\\vi\\")
+        self.assertEqual(nouveau_nom[1]["API"], "\\vi\\")
+
+    def test_recup_nom_5(self):
+        nouveau_nom = wikitionnaire.recup_nom("gars")
+        self.assertEqual(nouveau_nom[0]["mot"], "gars")
+        self.assertEqual(nouveau_nom[1]["mot"], "gars")
+
+        self.assertEqual(nouveau_nom[0]["genre"], "m")
+        self.assertEqual(nouveau_nom[0]["nombre"], "s")
+        self.assertEqual(nouveau_nom[1]["genre"], "m")
+        self.assertEqual(nouveau_nom[1]["nombre"], "p")
+
+        self.assertEqual(nouveau_nom[0]["nb_syllabes"], 1)
+        self.assertEqual(nouveau_nom[1]["nb_syllabes"], 1)
+
+        self.assertEqual(nouveau_nom[0]["API"], "\\ga\\")
+        self.assertEqual(nouveau_nom[1]["API"], "\\ga\\")
+
     def test_recup_determinant_1(self):
         dict_det = wikitionnaire.recup_determinant("le")
         self.assertEqual(dict_det["ms"]["mot"], "le")
