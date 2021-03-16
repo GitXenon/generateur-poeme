@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from tinydb import TinyDB, Query
 import requests
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 def recup_determinant(mot):
     """Retourne une entrée complète
@@ -292,14 +292,13 @@ def ajouter_dans_DB(mot_a_ajouter, categorie_mot):
             if categorie_mot == 'nom': 
                 for dict_nom in dict_a_ajouter:
                     Table_categorie.insert(dict_nom)
+                    logging.info(dict_nom['mot'] + ' ajouté!')
             else:
                 Table_categorie.insert(dict_a_ajouter)
+                logging.info(mot_a_ajouter + ' ajouté!')
 
     db.close()
 
 
 if __name__ == "__main__":
     pass
-    # liste_nom = []
-    # for item in liste_nom:
-    #     ajouter_nom_DB(item)
