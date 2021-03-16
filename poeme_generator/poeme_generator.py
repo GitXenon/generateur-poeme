@@ -3,8 +3,6 @@ import secrets
 
 from tinydb import TinyDB, Query
 
-import wikitionnaire
-
 db = TinyDB('db.json')
 
 #TODO: Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
