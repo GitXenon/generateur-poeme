@@ -301,4 +301,7 @@ def ajouter_dans_DB(mot_a_ajouter, categorie_mot):
 
 
 if __name__ == "__main__":
-    pass
+    liste = ['le', 'un', 'ton', 'de', 'cet']
+    for item in liste:
+        ajouter_dans_DB(item, 'determinant')
+

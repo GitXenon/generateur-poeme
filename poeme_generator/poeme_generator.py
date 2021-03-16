@@ -256,9 +256,11 @@ if __name__ == "__main__":
     TableAdj = db.table('adjectif')
     TableDet = db.table('determinant')
 
-    nom_int = secrets.randbelow(len(TableNom)-1)+1
-    adj_int = secrets.randbelow(len(TableAdj)-1)+1
-    det_int = secrets.randbelow(len(TableDet)-1)+1
+    nom_int = secrets.randbelow(len(TableNom))
+    adj_int = secrets.randbelow(len(TableAdj))
+    det_int = secrets.randbelow(len(TableDet))
+
+    print(det_int)
 
     dict_nom = TableNom.all()[nom_int]
     dict_adj = TableAdj.all()[adj_int]
