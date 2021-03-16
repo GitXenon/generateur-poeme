@@ -1,8 +1,9 @@
 import random
+import secrets
 
 from tinydb import TinyDB, Query
 
-from . import wikitionnaire
+import wikitionnaire
 
 db = TinyDB('db.json')
 
@@ -104,30 +105,32 @@ def groupe_nominal(dict_determinant, dict_nom):
         groupe_nominal = "{} {}".format(determinant, noyau)
     return groupe_nominal
 
-def groupe_nominal_adjectif(dict_nom=None):
-    """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
+def groupe_nominal_adjectif(dict_determinant, dict_nom, dict_adjectif):
+    """Création d'un groupe nominal avec expansion à partir d'une liste de dictionnaires contenant des noms (noyaux).
     On détermine le déterminant par la suite et si on ajoute un complément.
 
     Args:
-        dict_nom: Un dictionnaire contenant un nom. Par défaut on choisit un dictionnaire au hasard dans la liste.
+        dict_determinant (dict): Un dictionnaire contenant tous les nombres et genre d'un déterminant.
+        dict_nom (dict): Un dictionnaire contenant un nom et ses attributs.
 
     Returns:
-        Un groupe nominal.
+        groupe_nominal (str): Un groupe nominal.
     """
-    if dict_nom is None:
-        random.seed(random.randrange(99999999))
-        dict_nom = random.choice(liste_nom)
-    noyau = dict_nom["nom"]
-    determinant = nom_vers_determinant(dict_nom)
-    expansion = nom_vers_adjectif(dict_nom)
-    determinant = verifier_mot_debute_voyelle(expansion, determinant)
+    noyau = dict_nom['mot']
+    genre_nombre = dict_nom['genre'] + dict_nom['nombre']
+    dict_determinant = dict_determinant[genre_nombre]
+    dict_adjectif = dict_adjectif[genre_nombre]
+    adjectif = dict_adjectif['mot']
+    determinant = dict_determinant['mot']
+    # Doit vérifier si déterminant est même genre que nom.
+    determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     if determinant[-1] == "'":
         # Dernier caractère est un apostrophe donc on doit coller déterminant avec noyau
-        groupe_nominal_adjectif = "{}{} {}".format(determinant, expansion, noyau)
+        groupe_nominal = "{}{} {}".format(determinant, noyau, adjectif)
     else:
-        groupe_nominal_adjectif = "{} {} {}".format(determinant, expansion, noyau)
-    return groupe_nominal_adjectif
+        groupe_nominal = "{} {} {}".format(determinant, noyau, adjectif)
+    return groupe_nominal
 
 def groupe_verbal():
     """Création d'un groupe verbal
@@ -251,12 +254,26 @@ def nombre_syllables(mot):
     return num_syl
 
 if __name__ == "__main__":
-    print("Bienvenue au générateur de poème.\n-------------------\n\n")
-    print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
-    choix = input()
-    if choix == "1":
-        print(rime_AABB())
-    if choix == "2":
-        print(rime_ABBA())
-    if choix == "3":
-        print(rime_ABAB())
+    TableNom = db.table('nom')
+    TableAdj = db.table('adjectif')
+    TableDet = db.table('determinant')
+
+    nom_int = secrets.randbelow(len(TableNom)-1)+1
+    adj_int = secrets.randbelow(len(TableAdj)-1)+1
+    det_int = secrets.randbelow(len(TableDet)-1)+1
+
+    dict_nom = TableNom.all()[nom_int]
+    dict_adj = TableAdj.all()[adj_int]
+    dict_det = TableDet.all()[det_int]
+
+    GNadj = groupe_nominal_adjectif(dict_det, dict_nom, dict_adj)
+    print(GNadj)
+    # print("Bienvenue au générateur de poème.\n-------------------\n\n")
+    # print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
+    # choix = input()
+    # if choix == "1":
+    #     print(rime_AABB())
+    # if choix == "2":
+    #     print(rime_ABBA())
+    # if choix == "3":
+    #     print(rime_ABAB())
