@@ -5,77 +5,6 @@ from tinydb import TinyDB, Query
 
 #TODO: Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
 
-def initiation_rime():
-    """Initie une liste de mots rimant pour être utilisée dans un poème.
-
-    Returns:
-        premier_A: dict contenant un nom qui rime avec deuxieme_A
-        deuxieme_A: dict contenant un nom qui rime avec premier_A
-        premier_B: dict contenant un nom qui rime avec deuxieme_B
-        deuxieme_B: dict contenant un nom qui rime avec premier_B
-    """
-    liste_nom_rimant_A = []
-    liste_nom_rimant_B = []
-    premier_A = random.choice(liste_nom)
-    premier_B = random.choice(liste_nom)
-
-    while premier_A["rime"] == premier_B["rime"]:
-        premier_B = random.choice(liste_nom)
-    for i in range(len(liste_nom)):
-        if liste_nom[i]["rime"] == premier_A["rime"]:
-            liste_nom_rimant_A.append(liste_nom[i])
-        if liste_nom[i]["rime"] == premier_B["rime"]:
-            liste_nom_rimant_B.append(liste_nom[i])
-    deuxieme_A = random.choice(liste_nom_rimant_A)
-    deuxieme_B = random.choice(liste_nom_rimant_B)
-
-    return premier_A, deuxieme_A, premier_B, deuxieme_B
-
-def rime_AABB():
-    """Retourne un poème avec la structure de rime AABB
-
-    Returns:
-        structure_AABB: Un court poème formatté avec la structure de rime AABB.
-    """
-    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
-    structure_AABB = "{}\n{}\n{}\n{}\n".format(
-        groupe_verbal_avec_preposition(premier_A),
-        groupe_nominal_adjectif(deuxieme_A).capitalize(),
-        groupe_verbal_avec_preposition(premier_B),
-        groupe_nominal_adjectif(deuxieme_B).capitalize(),
-    )
-    return structure_AABB
-
-def rime_ABAB():
-    """Retourne un poème avec la structure de rime ABAB
-
-    Returns:
-        structure_ABAB: Un court poème formatté avec la structure de rime ABAB.
-    """
-    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
-    structure_ABAB = "{}\n{}\n{}\n{}\n".format(
-        groupe_verbal_avec_preposition(premier_A),
-        groupe_nominal_adjectif(premier_B).capitalize(),
-        groupe_verbal_avec_preposition(deuxieme_A),
-        groupe_nominal_adjectif(deuxieme_B).capitalize(),
-    )
-    return structure_ABAB
-
-def rime_ABBA():
-    """Retourne un poème avec la structure de rime ABBA
-
-    Returns:
-        structure_AABB: Un court poème formatté avec la structure de rime AABB.
-    """
-    premier_A, deuxieme_A, premier_B, deuxieme_B = initiation_rime()
-    structure_ABBA = "{}\n{}\n{}\n{}\n".format(
-        groupe_verbal_avec_preposition(premier_A),
-        groupe_nominal_adjectif(premier_B).capitalize(),
-        groupe_verbal_avec_preposition(deuxieme_B),
-        groupe_nominal_adjectif(deuxieme_A).capitalize(),
-    )
-    return structure_ABBA
-
 def groupe_nominal(dict_determinant, dict_nom):
     """Création d'un groupe nominal à partir d'une liste de dictionnaires contenant des noms (noyaux).
     On détermine le déterminant par la suite et si on ajoute un complément.
@@ -114,12 +43,13 @@ def groupe_nominal_adjectif(dict_determinant, dict_nom, dict_adjectif):
     """
     noyau = dict_nom['mot']
     genre_nombre = dict_nom['genre'] + dict_nom['nombre']
+    
     dict_determinant = dict_determinant[genre_nombre]
+    determinant = dict_determinant['mot']
+    determinant = verifier_mot_debute_voyelle(noyau, determinant)
+
     dict_adjectif = dict_adjectif[genre_nombre]
     adjectif = dict_adjectif['mot']
-    determinant = dict_determinant['mot']
-    # Doit vérifier si déterminant est même genre que nom.
-    determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     if determinant[-1] == "'":
         # Dernier caractère est un apostrophe donc on doit coller déterminant avec noyau
@@ -177,21 +107,6 @@ def groupe_prepositionnel():
     groupe_prepositionnel = "{} {}".format(preposition, gn)
     return groupe_prepositionnel
 
-def nom_vers_determinant(dict_nom):
-    """Retourne un déterminant du même genre que le nom.
-
-    Args:
-        dict_nom: Un dictionnaire contenant un nom et son genre.
-
-    Returns:
-        Un déterminant du même genre que le nom passé en argument.
-    """
-    dict_determinant = random.choice(liste_determinant)
-    for k in dict_determinant:
-        if k == dict_nom["genre"]:
-            determinant = dict_determinant[k]
-    return determinant
-
 def verifier_mot_debute_voyelle(nom, determinant):
     """Retourne un déterminant selon si le mot passé en argument commence par une voyelle
 
@@ -206,21 +121,6 @@ def verifier_mot_debute_voyelle(nom, determinant):
         if determinant == "ma":
             determinant = "mon"
     return determinant
-
-def nom_vers_adjectif(dict_nom):
-    """Retourne un adjectif du même genre que le nom.
-
-    Args:
-        dict_nom (dict): Un dictionnaire contenant un nom et son genre.
-
-    Returns:
-        adjectif (str): Un adjectif du même genre que le nom passé en argument.
-    """
-    dict_adjectif = random.choice(liste_adjectif)
-    for k in dict_adjectif:
-        if k == dict_nom["genre"]:
-            adjectif = dict_adjectif[k]
-    return adjectif
 
 def nombre_syllables(mot):
     """Retourne le nombre de syllables dans un mot passé en argument.
