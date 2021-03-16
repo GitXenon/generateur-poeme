@@ -3,8 +3,6 @@ import secrets
 
 from tinydb import TinyDB, Query
 
-db = TinyDB('db.json')
-
 #TODO: Beau / bel. Devant un nom masculin commençant par une voyelle ou un h muet, on emploie la forme bel 
 
 def initiation_rime():
@@ -252,6 +250,8 @@ def nombre_syllables(mot):
     return num_syl
 
 if __name__ == "__main__":
+    db = TinyDB('db.json')
+
     TableNom = db.table('nom')
     TableAdj = db.table('adjectif')
     TableDet = db.table('determinant')
@@ -260,14 +260,12 @@ if __name__ == "__main__":
     adj_int = secrets.randbelow(len(TableAdj))
     det_int = secrets.randbelow(len(TableDet))
 
-    print(det_int)
-
     dict_nom = TableNom.all()[nom_int]
     dict_adj = TableAdj.all()[adj_int]
     dict_det = TableDet.all()[det_int]
 
     GNadj = groupe_nominal_adjectif(dict_det, dict_nom, dict_adj)
-    print(GNadj)
+    print(GNadj.capitalize())
     # print("Bienvenue au générateur de poème.\n-------------------\n\n")
     # print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
     # choix = input()
