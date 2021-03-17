@@ -1,5 +1,7 @@
 import random
 import secrets
+import re
+import logging
 
 from tinydb import TinyDB, Query
 
@@ -18,9 +20,9 @@ def groupe_nominal(dict_determinant, dict_nom):
     """
     noyau = dict_nom['mot']
     genre_nombre = dict_nom['genre'] + dict_nom['nombre']
+
     dict_determinant = dict_determinant[genre_nombre]
     determinant = dict_determinant['mot']
-    # Doit vérifier si déterminant est même genre que nom.
     determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     if determinant[-1] == "'":
@@ -46,16 +48,16 @@ def groupe_nominal_adjectif(dict_determinant, dict_nom, dict_adjectif):
     
     dict_determinant = dict_determinant[genre_nombre]
     determinant = dict_determinant['mot']
-    determinant = verifier_mot_debute_voyelle(noyau, determinant)
 
     dict_adjectif = dict_adjectif[genre_nombre]
     adjectif = dict_adjectif['mot']
 
+    determinant = verifier_mot_debute_voyelle(adjectif, determinant)
     if determinant[-1] == "'":
         # Dernier caractère est un apostrophe donc on doit coller déterminant avec noyau
-        groupe_nominal = "{}{} {}".format(determinant, noyau, adjectif)
+        groupe_nominal = "{}{} {}".format(determinant, adjectif, noyau)
     else:
-        groupe_nominal = "{} {} {}".format(determinant, noyau, adjectif)
+        groupe_nominal = "{} {} {}".format(determinant, adjectif, noyau)
     return groupe_nominal
 
 def groupe_verbal():
@@ -114,7 +116,7 @@ def verifier_mot_debute_voyelle(nom, determinant):
         determinant (str): Un déterminant.
     """
     if nom[0] == ("a" or "e" or "i" or "o" or "u" or "h" or "é"):
-        if determinant == "la" or determinant == "le":
+        if determinant == ("la" or 'La' or 'Le' or 'le'):
             determinant = "l'"
         if determinant == "ta":
             determinant == "ton"
@@ -149,6 +151,27 @@ def nombre_syllables(mot):
                             j=j+1
     return num_syl
 
+def trouver_rime(dict_nom, table_nom):
+    """Avec la phonétique API, retourne une liste de dict qui rime avec le mot passé en argument.
+
+    Args:
+        dict_nom (dict): Un dictionnaire contenant un nom.
+        table_nom (table): la base de donnée avec tous les noms.
+
+    Returns:
+        liste_rimant (list): Une liste de mot qui rime avec le mot.
+    """
+    regex = '([\u0254\u0303|\u0069|\u0065|\u025b|\u025b\u0303|\u0153\u0303|\u0153|\u0259|\u00f8|\u0079|\u0075|\u006f|\u0254|\u0254\u0303|\u0251\u0303|\u0251|\u0061][\u006e|\u0272|\u014b|\u0261|\u006b|\u006d|\u0062|\u0070|\u0076|\u0066|\u0064|\u0074|\u0292|\u0283|\u007a|\u0073|\u0281|\u006c|\u006a]*)\\\\$'
+    m = re.search(regex, dict_nom['API'])
+    try:
+        newRegex = m[0]
+    except TypeError:
+        logging.info('Aucun rime trouvé avec ce mot.')
+        return table_nom
+    res = ''.join(r'\u{:04X}'.format(ord(chr)) for chr in newRegex) # On convertit le rime en unicode
+    liste_rimant = table_nom.search(Query().API.search(res))
+    return liste_rimant
+
 if __name__ == "__main__":
     db = TinyDB('db.json')
 
@@ -164,8 +187,20 @@ if __name__ == "__main__":
     dict_adj = TableAdj.all()[adj_int]
     dict_det = TableDet.all()[det_int]
 
+    ListeNom = trouver_rime(dict_nom, TableNom)
+
+    nom_int2 = secrets.randbelow(len(ListeNom))
+    adj_int2 = secrets.randbelow(len(TableAdj))
+    det_int2 = secrets.randbelow(len(TableDet))
+
+    dict_nom2 = ListeNom[nom_int2]
+    dict_adj2 = TableAdj.all()[adj_int2]
+    dict_det2 = TableDet.all()[det_int2]
+
     GNadj = groupe_nominal_adjectif(dict_det, dict_nom, dict_adj)
+    GNadj2 = groupe_nominal_adjectif(dict_det2, dict_nom2, dict_adj2)
     print(GNadj.capitalize())
+    print(GNadj2.capitalize())
     # print("Bienvenue au générateur de poème.\n-------------------\n\n")
     # print("Veuillez prendre une option parmis les suivantes:\n1.AABB\n2.ABBA\n3.ABAB\n")
     # choix = input()

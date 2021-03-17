@@ -8,7 +8,7 @@ import requests
 logging.basicConfig(level=logging.INFO)
 
 def recup_determinant(mot):
-    """Retourne une entrée complète
+    """Retourne un dictionnaire complet avec les attributs du déterminant passé en argument.
 
     Args:
         mot (str): le mot à récupérer.
@@ -63,7 +63,7 @@ def recup_determinant(mot):
 
 
 def recup_nom(mot):
-    """Retourne une entrée complète
+    """Retourne une liste de dictionnaires avec les attributs du nom passé en argument.
 
     Args:
         mot (str): le mot à récupérer.
@@ -156,10 +156,10 @@ def recup_nom(mot):
 
 
 def recup_adjectif(mot):
-    """Retourne une entrée complète
+    """Retourne un dictionnaire complet avec les attributs de l'adjectif passé en argument.
 
     Args:
-        mot (str): le mot à récupérer.
+        mot (str): L'adjectif à récupérer.
 
     Returns:
         nouvel_adj (dict): Dictionnaire avec l'adjectif pour ajouter au DB
