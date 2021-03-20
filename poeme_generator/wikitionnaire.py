@@ -7,6 +7,7 @@ import requests
 
 logging.basicConfig(level=logging.INFO)
 
+
 def recup_determinant(mot):
     """Retourne un dictionnaire complet avec les attributs du déterminant passé en argument.
 
@@ -268,40 +269,39 @@ def ajouter_dans_DB(mot_a_ajouter, categorie_mot):
         mot_a_ajouter (str): Un mot.
         categorie_mot (str): La catégorie ('déterminant', 'nom', etc.) que mot_a_ajouter appartient.
     """
-    db = TinyDB('db.json')
+    db = TinyDB("db.json")
 
-    if categorie_mot == 'nom':
-        Table_categorie = db.table('nom')
-    elif categorie_mot == 'determinant':
-        Table_categorie = db.table('determinant')
-    elif categorie_mot == 'adjectif':
-        Table_categorie = db.table('adjectif')
+    if categorie_mot == "nom":
+        Table_categorie = db.table("nom")
+    elif categorie_mot == "determinant":
+        Table_categorie = db.table("determinant")
+    elif categorie_mot == "adjectif":
+        Table_categorie = db.table("adjectif")
 
     if existe_dans_DB(mot_a_ajouter, Table_categorie):
         logging.info(mot_a_ajouter + " est déjà dans la base de donnée !")
     else:
         logging.info("Ajout de " + mot_a_ajouter + " en cours...")
 
-        if categorie_mot == 'nom':
+        if categorie_mot == "nom":
             dict_a_ajouter = recup_nom(mot_a_ajouter)
-        elif categorie_mot == 'determinant':
+        elif categorie_mot == "determinant":
             dict_a_ajouter = recup_determinant(mot_a_ajouter)
-        elif categorie_mot == 'adjectif':
+        elif categorie_mot == "adjectif":
             dict_a_ajouter = recup_adjectif(mot_a_ajouter)
         if dict_a_ajouter is not None:
-            if categorie_mot == 'nom': 
+            if categorie_mot == "nom":
                 for dict_nom in dict_a_ajouter:
                     Table_categorie.insert(dict_nom)
-                    logging.info(dict_nom['mot'] + ' ajouté!')
+                    logging.info(dict_nom["mot"] + " ajouté!")
             else:
                 Table_categorie.insert(dict_a_ajouter)
-                logging.info(mot_a_ajouter + ' ajouté!')
+                logging.info(mot_a_ajouter + " ajouté!")
 
     db.close()
 
 
 if __name__ == "__main__":
-    liste = ['le', 'un', 'ton', 'de', 'cet']
+    liste = ["le", "un", "ton", "de", "cet"]
     for item in liste:
-        ajouter_dans_DB(item, 'determinant')
-
+        ajouter_dans_DB(item, "determinant")
