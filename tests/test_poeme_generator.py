@@ -1,10 +1,10 @@
 import unittest
-import tempfile
 
 from tinydb import TinyDB, Query
 from tinydb.storages import MemoryStorage
 
 from context import poeme_generator
+from context import wikitionnaire
 
 class TestNombreSyllable(unittest.TestCase):
     def test_syllable_1(self):
@@ -38,11 +38,26 @@ class TestDatabase(unittest.TestCase):
         self.db = TinyDB(storage=MemoryStorage)
         self.User = Query()
     
-    def test_1(self):
-        # Example de test
-        self.db.insert({'name': 'John', 'age': 22})
-        req = self.db.search(self.User.name == 'John')
-        self.assertEqual(req, [{'name': 'John', 'age': 22}])
+    def test_double_1(self):
+        wikitionnaire.ajouter_dans_DB('amour', 'nom', self.db) # On ajoute le nom amour
+        Nom = self.db.table('nom') # Une table contenant tous les noms
+        liste_nom = Nom.all() # On fait une copie de tous les noms dans la db
+        wikitionnaire.ajouter_dans_DB('amour', 'nom', self.db) # On ajoute le même nom qu'au début
+        self.assertEqual(Nom.all(), liste_nom) # On vérifie que la liste de tous les noms n'a pas changé
+    
+    def test_double_2(self):
+        wikitionnaire.ajouter_dans_DB('de', 'determinant', self.db)
+        Det = self.db.table('determinant')
+        liste_det = Det.all()
+        wikitionnaire.ajouter_dans_DB('de', 'determinant', self.db)
+        self.assertEqual(Det.all(), liste_det)
+
+    def test_double_2(self):
+        wikitionnaire.ajouter_dans_DB('intelligent', 'adjectif', self.db)
+        Adj = self.db.table('adjectif')
+        liste_adj = Adj.all()
+        wikitionnaire.ajouter_dans_DB('intelligent', 'adjectif', self.db)
+        self.assertEqual(Adj.all(), liste_adj)
 
 
 if __name__ == "__main__":
