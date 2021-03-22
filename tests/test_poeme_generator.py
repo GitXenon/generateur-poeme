@@ -52,7 +52,7 @@ class TestDatabase(unittest.TestCase):
         wikitionnaire.ajouter_dans_DB('de', 'determinant', self.db)
         self.assertEqual(Det.all(), liste_det)
 
-    def test_double_2(self):
+    def test_double_3(self):
         wikitionnaire.ajouter_dans_DB('intelligent', 'adjectif', self.db)
         Adj = self.db.table('adjectif')
         liste_adj = Adj.all()
