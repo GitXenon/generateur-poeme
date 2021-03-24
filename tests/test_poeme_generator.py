@@ -38,21 +38,21 @@ class TestDatabase(unittest.TestCase):
         self.db = TinyDB(storage=MemoryStorage)
         self.User = Query()
     
-    def test_double_1(self):
+    def test_double_DB_nom(self):
         wikitionnaire.ajouter_dans_DB('amour', 'nom', self.db) # On ajoute le nom amour
         Nom = self.db.table('nom') # Une table contenant tous les noms
         liste_nom = Nom.all() # On fait une copie de tous les noms dans la db
         wikitionnaire.ajouter_dans_DB('amour', 'nom', self.db) # On ajoute le même nom qu'au début
         self.assertEqual(Nom.all(), liste_nom) # On vérifie que la liste de tous les noms n'a pas changé
     
-    def test_double_2(self):
+    def test_double_DB_determinant(self):
         wikitionnaire.ajouter_dans_DB('de', 'determinant', self.db)
         Det = self.db.table('determinant')
         liste_det = Det.all()
         wikitionnaire.ajouter_dans_DB('de', 'determinant', self.db)
         self.assertEqual(Det.all(), liste_det)
 
-    def test_double_3(self):
+    def test_double_DB_adjectif(self):
         wikitionnaire.ajouter_dans_DB('intelligent', 'adjectif', self.db)
         Adj = self.db.table('adjectif')
         liste_adj = Adj.all()
