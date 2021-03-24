@@ -262,14 +262,16 @@ def existe_dans_DB(mot, table):
     return is_in_database
 
 
-def ajouter_dans_DB(mot_a_ajouter, categorie_mot, db = TinyDB("db.json")):
+def ajouter_dans_DB(mot_a_ajouter, categorie_mot, db = None):
     """Une fonction pour ajouter un mot dans la base de donnée.
 
     Args:
         mot_a_ajouter (str): Un mot.
         categorie_mot (str): La catégorie ('déterminant', 'nom', etc.) que mot_a_ajouter appartient.
-        db: Ouverture d'un fichier json contenant une TinyDB.
+        db: Ouverture d'un fichier json contenant une TinyDB. TinyDB("db.json")
     """
+    if db is None:
+        db = TinyDB("db.json")
     
     if categorie_mot == "nom":
         Table_categorie = db.table("nom")
