@@ -202,3 +202,31 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(dict_det["mp"]["API"], "\\o.kœ̃\\")
         self.assertEqual(dict_det["fs"]["API"], "\\o.kyn\\")
         self.assertEqual(dict_det["fp"]["API"], "\\o.kyn\\")
+
+    def test_recup_nom_wc(self):
+        dict_nom = wikitionnaire.recup_nom("w.-c.")
+        self.assertEqual(dict_nom[0]["mot"], "w.-c.")
+        self.assertEqual(dict_nom[1]["mot"], "w.-c.")
+
+        self.assertEqual(dict_nom[0]["genre"], "m")
+        self.assertEqual(dict_nom[0]["nombre"], "s")
+        self.assertEqual(dict_nom[1]["genre"], "m")
+        self.assertEqual(dict_nom[1]["nombre"], "p")
+
+        self.assertEqual(dict_nom[0]["nb_syllabes"], 2)
+        self.assertEqual(dict_nom[1]["nb_syllabes"], 2)
+
+        self.assertEqual(dict_nom[0]["API"], "\\ve.se\\")
+        self.assertEqual(dict_nom[1]["API"], "\\ve.se\\")
+
+    def test_recup_nom_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_nom("kfajrijflp")
+        self.assertEqual(dict_nom, None)
+
+    def test_recup_adjectif_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_adjectif("kfajrijflp")
+        self.assertEqual(dict_nom, None)
+    
+    def test_recup_determinant_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_determinant("kfajrijflp")
+        self.assertEqual(dict_nom, None)
