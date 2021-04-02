@@ -118,12 +118,43 @@ def recup_mot(mot, categorie_mot):
             dict_mot = creation_dictionnaire(mot, nb_syllabes, genre, nombre, mot_API)
             liste_mot.append(dict_mot)
     elif len(liste_table_mot) == 4:
-        logging.error(
-            "Impossible d'ajouté ce mot: "
-            + mot
-            + ". Nombre <td> n'est pas implémenter."
-        )
-        return None  # TODO: Implémenter cette partie.
+        for i in range(1,4):
+            try:
+                if liste_table_mot[i]["colspan"] == '2':
+                    liste_a = liste_table_mot[i].find_all("a")
+                    mot = liste_a[0].text
+                    mot_API = liste_a[1].text
+                    nb_syllabes = mot_API.count(".") + 1
+                    if liste_table_mot[i].parent.th.text[:-1] == "Masculin":
+                        genre = "m"
+                    elif liste_table_mot[i].parent.th.text[:-1] == "Féminin":
+                        genre = "f"
+                    dict_mot = creation_dictionnaire(mot, nb_syllabes, genre, 's', mot_API)
+                    liste_mot.append(dict_mot)
+                    dict_mot = creation_dictionnaire(mot, nb_syllabes, genre, 'p', mot_API)
+                    liste_mot.append(dict_mot)
+            except KeyError:
+                liste_a = liste_table_mot[i].find_all("a")
+                mot = liste_a[0].text
+                try:
+                    mot_API = liste_a[1].text
+                except IndexError:
+                    mot_API = liste_table_mot[3].a.text
+                nb_syllabes = mot_API.count(".") + 1
+                if liste_table_mot[i].parent.th.text[:-1] == "Masculin":
+                    genre = "m"
+                    if i == 1:
+                        nombre = 's'
+                    if i == 2:
+                        nombre = 'p'
+                elif liste_table_mot[i].parent.th.text[:-1] == "Féminin":
+                    genre = "f"
+                    if i == 2:
+                        nombre = 's'
+                    if i == 3:
+                        nombre = 'p'
+                dict_mot = creation_dictionnaire(mot, nb_syllabes, genre, nombre, mot_API)
+                liste_mot.append(dict_mot)
     elif len(liste_table_mot) == 5:
         for i in range(1, 5):
             liste_a = liste_table_mot[i].find_all("a")
@@ -149,80 +180,6 @@ def recup_mot(mot, categorie_mot):
         return None
 
     return liste_mot
-
-
-def recup_adjectif(mot):
-    """Retourne un dictionnaire complet avec les attributs de l'adjectif passé en argument.
-
-    Args:
-        mot (str): L'adjectif à récupérer.
-
-    Returns:
-        nouvel_adj (dict): Dictionnaire avec l'adjectif pour ajouter au DB
-    """
-    url = "https://fr.wiktionary.org/wiki/"
-    page = requests.get(url + mot)
-
-    soup = BeautifulSoup(page.text, "html.parser")
-
-    table_genre_nombre = soup.find(class_="flextable flextable-fr-mfsp")
-    try:
-        liste_genre_nombre = table_genre_nombre.find_all("tr")
-    except AttributeError:
-        logging.error("Impossible d'ajouté ce mot: " + mot)
-        return None
-    try:
-        if liste_genre_nombre[1]["class"] == ["flextable-fr-m"]:
-            liste_mot = liste_genre_nombre[1].find_all("a")
-            try:
-                if liste_genre_nombre[1].td["colspan"] == "2":
-                    nom_ms = liste_mot[0].text
-                    nom_ms_API = liste_mot[1].text
-                    nom_mp = nom_ms
-                    nom_mp_API = nom_ms_API
-            except KeyError:
-                nom_ms = liste_mot[0].text
-                nom_ms_API = liste_mot[1].text
-                nom_mp = liste_mot[2].text
-                nom_mp_API = liste_mot[3].text
-
-        if liste_genre_nombre[2]["class"] == ["flextable-fr-f"]:
-            liste_mot = liste_genre_nombre[2].find_all("a")
-            try:
-                if liste_genre_nombre[2].td["colspan"] == "2":
-                    nom_fs = liste_mot[0].text
-                    nom_fs_API = liste_mot[1].text
-                    nom_fp = nom_fs
-                    nom_fp_API = nom_fs_API
-            except KeyError:
-                nom_fs = liste_mot[0].text
-                nom_fs_API = liste_mot[1].text
-                nom_fp = liste_mot[2].text
-                nom_fp_API = liste_mot[3].text
-    except KeyError:
-        liste_mot = liste_genre_nombre[1].find_all("a")
-        liste_mot_API = liste_genre_nombre[2].find_all("a")
-
-        nom_ms = liste_mot[0].text
-        nom_mp = liste_mot[1].text
-        nom_fs = nom_ms
-        nom_fp = nom_mp
-        nom_ms_API = liste_mot_API[0].text
-        nom_mp_API = nom_ms_API
-        nom_fs_API = nom_ms_API
-        nom_fp_API = nom_ms_API
-
-    nom_ms_syllabes = nom_ms_API.count(".") + 1
-    nom_mp_syllabes = nom_mp_API.count(".") + 1
-    nom_fs_syllabes = nom_fs_API.count(".") + 1
-    nom_fp_syllabes = nom_fp_API.count(".") + 1
-    nouvel_adj = {
-        "ms": {"mot": nom_ms, "nb_syllabes": nom_ms_syllabes, "API": nom_ms_API},
-        "fs": {"mot": nom_fs, "nb_syllabes": nom_fs_syllabes, "API": nom_fs_API},
-        "mp": {"mot": nom_mp, "nb_syllabes": nom_mp_syllabes, "API": nom_mp_API},
-        "fp": {"mot": nom_fp, "nb_syllabes": nom_fp_syllabes, "API": nom_fp_API},
-    }
-    return nouvel_adj
 
 
 def existe_dans_DB(mot, table):

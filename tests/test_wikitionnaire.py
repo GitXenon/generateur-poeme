@@ -5,58 +5,58 @@ from context import wikitionnaire
 class TestScrapingAdjectif(unittest.TestCase):
 
     def test_recup_adjectif_amoureux(self):
-        nouvel_adj = wikitionnaire.recup_adjectif("amoureux")
-        self.assertEqual(nouvel_adj["ms"]["mot"], "amoureux")
-        self.assertEqual(nouvel_adj["mp"]["mot"], "amoureux")
-        self.assertEqual(nouvel_adj["fs"]["mot"], "amoureuse")
-        self.assertEqual(nouvel_adj["fp"]["mot"], "amoureuses")
+        nouvel_adj = wikitionnaire.recup_mot("amoureux", "adjectif")
+        self.assertEqual(nouvel_adj[0]["mot"], "amoureux")
+        self.assertEqual(nouvel_adj[1]["mot"], "amoureux")
+        self.assertEqual(nouvel_adj[2]["mot"], "amoureuse")
+        self.assertEqual(nouvel_adj[3]["mot"], "amoureuses")
 
-        self.assertEqual(nouvel_adj["ms"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["mp"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["fs"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["fp"]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[0]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[1]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[2]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[3]["nb_syllabes"], 3)
 
-        self.assertEqual(nouvel_adj["ms"]["API"], "\\a.mu.ʁø\\")
-        self.assertEqual(nouvel_adj["mp"]["API"], "\\a.mu.ʁø\\")
-        self.assertEqual(nouvel_adj["fs"]["API"], "\\a.mu.ʁøz\\")
-        self.assertEqual(nouvel_adj["fp"]["API"], "\\a.mu.ʁøz\\")
+        self.assertEqual(nouvel_adj[0]["API"], "\\a.mu.ʁø\\")
+        self.assertEqual(nouvel_adj[1]["API"], "\\a.mu.ʁø\\")
+        self.assertEqual(nouvel_adj[2]["API"], "\\a.mu.ʁøz\\")
+        self.assertEqual(nouvel_adj[3]["API"], "\\a.mu.ʁøz\\")
 
     def test_recup_adjectif_beau(self):
-        nouvel_adj = wikitionnaire.recup_adjectif("beau")
-        self.assertEqual(nouvel_adj["ms"]["mot"], "beau")
-        self.assertEqual(nouvel_adj["mp"]["mot"], "beaux")
-        self.assertEqual(nouvel_adj["fs"]["mot"], "belle")
-        self.assertEqual(nouvel_adj["fp"]["mot"], "belles")
+        nouvel_adj = wikitionnaire.recup_mot("beau", "adjectif")
+        self.assertEqual(nouvel_adj[0]["mot"], "beau")
+        self.assertEqual(nouvel_adj[1]["mot"], "beaux")
+        self.assertEqual(nouvel_adj[2]["mot"], "belle")
+        self.assertEqual(nouvel_adj[3]["mot"], "belles")
 
-        self.assertEqual(nouvel_adj["ms"]["nb_syllabes"], 1)
-        self.assertEqual(nouvel_adj["mp"]["nb_syllabes"], 1)
-        self.assertEqual(nouvel_adj["fs"]["nb_syllabes"], 1)
-        self.assertEqual(nouvel_adj["fp"]["nb_syllabes"], 1)
+        self.assertEqual(nouvel_adj[0]["nb_syllabes"], 1)
+        self.assertEqual(nouvel_adj[1]["nb_syllabes"], 1)
+        self.assertEqual(nouvel_adj[2]["nb_syllabes"], 1)
+        self.assertEqual(nouvel_adj[3]["nb_syllabes"], 1)
 
-        self.assertEqual(nouvel_adj["ms"]["API"], "\\bo\\")
-        self.assertEqual(nouvel_adj["mp"]["API"], "\\bo\\")
-        self.assertEqual(nouvel_adj["fs"]["API"], "\\bɛl\\")
-        self.assertEqual(nouvel_adj["fp"]["API"], "\\bɛl\\")
+        self.assertEqual(nouvel_adj[0]["API"], "\\bo\\")
+        self.assertEqual(nouvel_adj[1]["API"], "\\bo\\")
+        self.assertEqual(nouvel_adj[2]["API"], "\\bɛl\\")
+        self.assertEqual(nouvel_adj[3]["API"], "\\bɛl\\")
 
     def test_recup_adjectif_politique(self):
-        nouvel_adj = wikitionnaire.recup_adjectif("politique")
-        self.assertEqual(nouvel_adj["ms"]["mot"], "politique")
-        self.assertEqual(nouvel_adj["mp"]["mot"], "politiques")
-        self.assertEqual(nouvel_adj["fs"]["mot"], "politique")
-        self.assertEqual(nouvel_adj["fp"]["mot"], "politiques")
+        nouvel_adj = wikitionnaire.recup_mot("politique", "adjectif")
+        self.assertEqual(nouvel_adj[0]["mot"], "politique")
+        self.assertEqual(nouvel_adj[1]["mot"], "politiques")
+        self.assertEqual(nouvel_adj[2]["mot"], "politique")
+        self.assertEqual(nouvel_adj[3]["mot"], "politiques")
 
-        self.assertEqual(nouvel_adj["ms"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["mp"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["fs"]["nb_syllabes"], 3)
-        self.assertEqual(nouvel_adj["fp"]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[0]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[1]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[2]["nb_syllabes"], 3)
+        self.assertEqual(nouvel_adj[3]["nb_syllabes"], 3)
 
-        self.assertEqual(nouvel_adj["ms"]["API"], "\\pɔ.li.tik\\")
-        self.assertEqual(nouvel_adj["mp"]["API"], "\\pɔ.li.tik\\")
-        self.assertEqual(nouvel_adj["fs"]["API"], "\\pɔ.li.tik\\")
-        self.assertEqual(nouvel_adj["fp"]["API"], "\\pɔ.li.tik\\")
+        self.assertEqual(nouvel_adj[0]["API"], "\\pɔ.li.tik\\")
+        self.assertEqual(nouvel_adj[1]["API"], "\\pɔ.li.tik\\")
+        self.assertEqual(nouvel_adj[2]["API"], "\\pɔ.li.tik\\")
+        self.assertEqual(nouvel_adj[3]["API"], "\\pɔ.li.tik\\")
 
     def test_recup_adjectif_mot_inexistant(self):
-        dict_nom = wikitionnaire.recup_adjectif("kfajrijflp")
+        dict_nom = wikitionnaire.recup_mot("kfajrijflp", "adjectif")
         self.assertEqual(dict_nom, None)
 
 class TestScrapingNom(unittest.TestCase):
@@ -152,6 +152,57 @@ class TestScrapingNom(unittest.TestCase):
         self.assertEqual(dict_nom[0]["nombre"], "p")
         self.assertEqual(dict_nom[0]["nb_syllabes"], 2)
         self.assertEqual(dict_nom[0]["API"], "\\ve.se\\")
+
+    def test_recup_nom_gomme(self):
+        dict_nom = wikitionnaire.recup_mot("gomme", "nom")
+        self.assertEqual(dict_nom[0]["mot"], "gomme")
+        self.assertEqual(dict_nom[1]["mot"], "gommes")
+
+        self.assertEqual(dict_nom[0]["genre"], "f")
+        self.assertEqual(dict_nom[0]["nombre"], "s")
+
+        self.assertEqual(dict_nom[1]["genre"], "f")
+        self.assertEqual(dict_nom[1]["nombre"], "p")
+
+        self.assertEqual(dict_nom[0]["nb_syllabes"], 1)
+        self.assertEqual(dict_nom[1]["nb_syllabes"], 1)
+
+        self.assertEqual(dict_nom[0]["API"], "\\ɡɔm\\")
+        self.assertEqual(dict_nom[1]["API"], "\\ɡɔm\\")
+
+    def test_recup_nom_rayure(self):
+        dict_nom = wikitionnaire.recup_mot("rayure", "nom")
+        self.assertEqual(dict_nom[0]["mot"], "rayure")
+        self.assertEqual(dict_nom[1]["mot"], "rayures")
+
+        self.assertEqual(dict_nom[0]["genre"], "f")
+        self.assertEqual(dict_nom[0]["nombre"], "s")
+
+        self.assertEqual(dict_nom[1]["genre"], "f")
+        self.assertEqual(dict_nom[1]["nombre"], "p")
+
+        self.assertEqual(dict_nom[0]["nb_syllabes"], 2)
+        self.assertEqual(dict_nom[1]["nb_syllabes"], 2)
+        
+        self.assertEqual(dict_nom[0]["API"], "\\ʁɛ.jyʁ\\")
+        self.assertEqual(dict_nom[1]["API"], "\\ʁɛ.jyʁ\\")
+
+    def test_recup_nom_trampoline(self):
+        dict_nom = wikitionnaire.recup_mot("trampoline", "nom")
+        self.assertEqual(dict_nom[0]["mot"], "trampoline")
+        self.assertEqual(dict_nom[1]["mot"], "trampolines")
+
+        self.assertEqual(dict_nom[0]["genre"], "m") # En France, mais au Québec c'est féminin
+        self.assertEqual(dict_nom[0]["nombre"], "s")
+
+        self.assertEqual(dict_nom[1]["genre"], "m")
+        self.assertEqual(dict_nom[1]["nombre"], "p")
+
+        self.assertEqual(dict_nom[0]["nb_syllabes"], 3)
+        self.assertEqual(dict_nom[1]["nb_syllabes"], 3)
+        
+        self.assertEqual(dict_nom[0]["API"], "\\tʁɑ̃.pɔ.lin\\")
+        self.assertEqual(dict_nom[1]["API"], "\\tʁɑ̃.pɔ.lin\\")
 
 class TestScrapingDeterminant(unittest.TestCase):
 
