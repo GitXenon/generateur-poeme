@@ -2,7 +2,7 @@ import unittest
 
 from context import wikitionnaire
 
-class TestWikitionnaire(unittest.TestCase):
+class TestScrapingAdjectif(unittest.TestCase):
 
     def test_recup_adjectif_amoureux(self):
         nouvel_adj = wikitionnaire.recup_adjectif("amoureux")
@@ -55,8 +55,18 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouvel_adj["fs"]["API"], "\\pɔ.li.tik\\")
         self.assertEqual(nouvel_adj["fp"]["API"], "\\pɔ.li.tik\\")
 
+    def test_recup_adjectif_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_adjectif("kfajrijflp")
+        self.assertEqual(dict_nom, None)
+
+class TestScrapingNom(unittest.TestCase):
+    
+    def test_recup_nom_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_mot("kfajrijflp", 'nom')
+        self.assertEqual(dict_nom, None)
+
     def test_recup_nom_voix(self):
-        nouveau_nom = wikitionnaire.recup_nom("voix")
+        nouveau_nom = wikitionnaire.recup_mot("voix", 'nom')
         self.assertEqual(nouveau_nom[0]["mot"], "voix")
         self.assertEqual(nouveau_nom[1]["mot"], "voix")
 
@@ -72,7 +82,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[1]["API"], "\\vwa\\")
 
     def test_recup_nom_amant(self):
-        nouveau_nom = wikitionnaire.recup_nom("amant")
+        nouveau_nom = wikitionnaire.recup_mot("amant", 'nom')
         self.assertEqual(nouveau_nom[0]["mot"], "amant")
         self.assertEqual(nouveau_nom[1]["mot"], "amants")
 
@@ -88,7 +98,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[1]["API"], "\\a.mɑ̃\\")
 
     def test_recup_nom_tendresse(self):
-        nouveau_nom = wikitionnaire.recup_nom("tendresse")
+        nouveau_nom = wikitionnaire.recup_mot("tendresse", 'nom')
         self.assertEqual(nouveau_nom[0]["mot"], "tendresse")
         self.assertEqual(nouveau_nom[1]["mot"], "tendresses")
 
@@ -104,7 +114,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[1]["API"], "\\tɑ̃.dʁɛs\\")
 
     def test_recup_nom_vie(self):
-        nouveau_nom = wikitionnaire.recup_nom("vie")
+        nouveau_nom = wikitionnaire.recup_mot("vie", 'nom')
         self.assertEqual(nouveau_nom[0]["mot"], "vie")
         self.assertEqual(nouveau_nom[1]["mot"], "vies")
 
@@ -120,7 +130,7 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[1]["API"], "\\vi\\")
 
     def test_recup_nom_gars(self):
-        nouveau_nom = wikitionnaire.recup_nom("gars")
+        nouveau_nom = wikitionnaire.recup_mot("gars", "nom")
         self.assertEqual(nouveau_nom[0]["mot"], "gars")
         self.assertEqual(nouveau_nom[1]["mot"], "gars")
 
@@ -135,98 +145,105 @@ class TestWikitionnaire(unittest.TestCase):
         self.assertEqual(nouveau_nom[0]["API"], "\\ga\\")
         self.assertEqual(nouveau_nom[1]["API"], "\\ga\\")
 
+    def test_recup_nom_wc(self):
+        dict_nom = wikitionnaire.recup_mot("w.-c.", "nom")
+        self.assertEqual(dict_nom[0]["mot"], "w.-c.")
+        self.assertEqual(dict_nom[0]["genre"], "m")
+        self.assertEqual(dict_nom[0]["nombre"], "p")
+        self.assertEqual(dict_nom[0]["nb_syllabes"], 2)
+        self.assertEqual(dict_nom[0]["API"], "\\ve.se\\")
+
+class TestScrapingDeterminant(unittest.TestCase):
+
+    def test_recup_determinant_mot_inexistant(self):
+        dict_nom = wikitionnaire.recup_mot("kfajrijflp", "determinant")
+        self.assertEqual(dict_nom, None)
+
     def test_recup_determinant_le(self):
-        dict_det = wikitionnaire.recup_determinant("le")
-        self.assertEqual(dict_det["ms"]["mot"], "le")
-        self.assertEqual(dict_det["mp"]["mot"], "les")
-        self.assertEqual(dict_det["fs"]["mot"], "la")
-        self.assertEqual(dict_det["fp"]["mot"], "les")
+        dict_det = wikitionnaire.recup_mot("le", "determinant")
+        self.assertEqual(dict_det[0]["mot"], "le")
+        self.assertEqual(dict_det[1]["mot"], "les")
+        self.assertEqual(dict_det[2]["mot"], "la")
+        self.assertEqual(dict_det[3]["mot"], "les")
 
-        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[0]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[1]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[2]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[3]["nb_syllabes"], 1)
 
-        self.assertEqual(dict_det["ms"]["API"], "\\lə\\")
-        self.assertEqual(dict_det["mp"]["API"], "\\le\\")
-        self.assertEqual(dict_det["fs"]["API"], "\\la\\")
-        self.assertEqual(dict_det["fp"]["API"], "\\le\\")
+        self.assertEqual(dict_det[0]["API"], "\\lə\\")
+        self.assertEqual(dict_det[1]["API"], "\\le\\")
+        self.assertEqual(dict_det[2]["API"], "\\la\\")
+        self.assertEqual(dict_det[3]["API"], "\\le\\")
 
     def test_recup_determinant_ce(self):
-        dict_det = wikitionnaire.recup_determinant("ce")
-        self.assertEqual(dict_det["ms"]["mot"], "ce")
-        self.assertEqual(dict_det["mp"]["mot"], "ces")
-        self.assertEqual(dict_det["fs"]["mot"], "cette")
-        self.assertEqual(dict_det["fp"]["mot"], "ces")
+        dict_det = wikitionnaire.recup_mot("ce", "determinant")
+        self.assertEqual(dict_det[0]["mot"], "ce")
+        self.assertEqual(dict_det[1]["mot"], "ces")
+        self.assertEqual(dict_det[2]["mot"], "cette")
+        self.assertEqual(dict_det[3]["mot"], "ces")
 
-        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[0]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[1]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[2]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[3]["nb_syllabes"], 1)
 
-        self.assertEqual(dict_det["ms"]["API"], "\\sə\\")
-        self.assertEqual(dict_det["mp"]["API"], "\\se\\")
-        self.assertEqual(dict_det["fs"]["API"], "\\sɛt\\")
-        self.assertEqual(dict_det["fp"]["API"], "\\se\\")
+        self.assertEqual(dict_det[0]["API"], "\\sə\\")
+        self.assertEqual(dict_det[1]["API"], "\\se\\")
+        self.assertEqual(dict_det[2]["API"], "\\sɛt\\")
+        self.assertEqual(dict_det[3]["API"], "\\se\\")
 
     def test_recup_determinant_mon(self):
-        dict_det = wikitionnaire.recup_determinant("mon")
-        self.assertEqual(dict_det["ms"]["mot"], "mon")
-        self.assertEqual(dict_det["mp"]["mot"], "mes")
-        self.assertEqual(dict_det["fs"]["mot"], "ma")
-        self.assertEqual(dict_det["fp"]["mot"], "mes")
+        dict_det = wikitionnaire.recup_mot("mon", "determinant")
+        self.assertEqual(dict_det[0]["mot"], "mon")
+        self.assertEqual(dict_det[1]["mot"], "mes")
+        self.assertEqual(dict_det[2]["mot"], "ma")
+        self.assertEqual(dict_det[3]["mot"], "mes")
 
-        self.assertEqual(dict_det["ms"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["mp"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fs"]["nb_syllabes"], 1)
-        self.assertEqual(dict_det["fp"]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[0]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[1]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[2]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[3]["nb_syllabes"], 1)
 
-        self.assertEqual(dict_det["ms"]["API"], "\\mɔ̃\\")
-        self.assertEqual(dict_det["mp"]["API"], "\\mɛ\\")
-        self.assertEqual(dict_det["fs"]["API"], "\\ma\\")
-        self.assertEqual(dict_det["fp"]["API"], "\\mɛ\\")
+        self.assertEqual(dict_det[0]["API"], "\\mɔ̃\\")
+        self.assertEqual(dict_det[1]["API"], "\\mɛ\\")
+        self.assertEqual(dict_det[2]["API"], "\\ma\\")
+        self.assertEqual(dict_det[3]["API"], "\\mɛ\\")
 
     def test_recup_determinant_aucun(self):
-        dict_det = wikitionnaire.recup_determinant("aucun")
-        self.assertEqual(dict_det["ms"]["mot"], "aucun")
-        self.assertEqual(dict_det["mp"]["mot"], "aucuns")
-        self.assertEqual(dict_det["fs"]["mot"], "aucune")
-        self.assertEqual(dict_det["fp"]["mot"], "aucunes")
+        dict_det = wikitionnaire.recup_mot("aucun", "determinant")
+        self.assertEqual(dict_det[0]['mot'], "aucun")
+        self.assertEqual(dict_det[1]['mot'], "aucuns")
+        self.assertEqual(dict_det[2]['mot'], "aucune")
+        self.assertEqual(dict_det[3]['mot'], "aucunes")
 
-        self.assertEqual(dict_det["ms"]["nb_syllabes"], 2)
-        self.assertEqual(dict_det["mp"]["nb_syllabes"], 2)
-        self.assertEqual(dict_det["fs"]["nb_syllabes"], 2)
-        self.assertEqual(dict_det["fp"]["nb_syllabes"], 2)
+        self.assertEqual(dict_det[0]['genre'], "m")
+        self.assertEqual(dict_det[1]['genre'], "m")
+        self.assertEqual(dict_det[2]['genre'], "f")
+        self.assertEqual(dict_det[3]['genre'], "f")
+        
+        self.assertEqual(dict_det[0]['nombre'], "s")
+        self.assertEqual(dict_det[1]['nombre'], "p")
+        self.assertEqual(dict_det[2]['nombre'], "s")
+        self.assertEqual(dict_det[3]['nombre'], "p")
 
-        self.assertEqual(dict_det["ms"]["API"], "\\o.kœ̃\\")
-        self.assertEqual(dict_det["mp"]["API"], "\\o.kœ̃\\")
-        self.assertEqual(dict_det["fs"]["API"], "\\o.kyn\\")
-        self.assertEqual(dict_det["fp"]["API"], "\\o.kyn\\")
+        self.assertEqual(dict_det[0]["nb_syllabes"], 2)
+        self.assertEqual(dict_det[1]["nb_syllabes"], 2)
+        self.assertEqual(dict_det[2]["nb_syllabes"], 2)
+        self.assertEqual(dict_det[3]["nb_syllabes"], 2)
 
-    def test_recup_nom_wc(self):
-        dict_nom = wikitionnaire.recup_nom("w.-c.")
-        self.assertEqual(dict_nom[0]["mot"], "w.-c.")
-        self.assertEqual(dict_nom[1]["mot"], "w.-c.")
+        self.assertEqual(dict_det[0]["API"], "\\o.kœ̃\\")
+        self.assertEqual(dict_det[1]["API"], "\\o.kœ̃\\")
+        self.assertEqual(dict_det[2]["API"], "\\o.kyn\\")
+        self.assertEqual(dict_det[3]["API"], "\\o.kyn\\")
 
-        self.assertEqual(dict_nom[0]["genre"], "m")
-        self.assertEqual(dict_nom[0]["nombre"], "s")
-        self.assertEqual(dict_nom[1]["genre"], "m")
-        self.assertEqual(dict_nom[1]["nombre"], "p")
+    def test_recup_determinant_un(self):
+        dict_det = wikitionnaire.recup_mot("un", "determinant")
+        self.assertEqual(dict_det[0]['mot'], "un")
+        self.assertEqual(dict_det[1]['mot'], "une")
 
-        self.assertEqual(dict_nom[0]["nb_syllabes"], 2)
-        self.assertEqual(dict_nom[1]["nb_syllabes"], 2)
+        self.assertEqual(dict_det[0]["nb_syllabes"], 1)
+        self.assertEqual(dict_det[1]["nb_syllabes"], 1)
 
-        self.assertEqual(dict_nom[0]["API"], "\\ve.se\\")
-        self.assertEqual(dict_nom[1]["API"], "\\ve.se\\")
-
-    def test_recup_nom_mot_inexistant(self):
-        dict_nom = wikitionnaire.recup_nom("kfajrijflp")
-        self.assertEqual(dict_nom, None)
-
-    def test_recup_adjectif_mot_inexistant(self):
-        dict_nom = wikitionnaire.recup_adjectif("kfajrijflp")
-        self.assertEqual(dict_nom, None)
-    
-    def test_recup_determinant_mot_inexistant(self):
-        dict_nom = wikitionnaire.recup_determinant("kfajrijflp")
-        self.assertEqual(dict_nom, None)
+        self.assertEqual(dict_det[0]["API"], "\\œ̃\\")
+        self.assertEqual(dict_det[1]["API"], "\\yn\\")
