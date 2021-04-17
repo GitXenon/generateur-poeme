@@ -1,7 +1,19 @@
-# Générateur de poème
-[![Coverage Status](https://coveralls.io/repos/github/GitXenon/generateur-poeme/badge.svg?branch=main)](https://coveralls.io/github/GitXenon/generateur-poeme?branch=main)
+<p align="center">
+    <a href="http://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/license-MIT-3C93B4.svg?style=flat" alt="MIT License"></a>
+    <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
+    <br />
+    <br />
+    <i>Une tentative d'un système automatisé pour générer des poèmes à l'aide d'un réseau de transition récursif</i>
+    <br />
+<br />
+    <i><b>Auteur</b>:
+        <a href="https://github.com/GitXenon">Xavier B.</a>
+    </i>
+<br />
+</p>
+<hr />
 
-Une implémentation de Recursive Transition Networks en Python pour générer des (terribles) poèmes. Pour l'instant il reste beaucoup de travail. Les phrases ont pour comme structure:
+Une implémentation de Recursive Transition Networks en Python pour générer de (terribles) poèmes. Pour l'instant il reste beaucoup de travail. Les phrases ont pour comme structure:
 ```
 phrase::  [groupe_verbal | groupe_nominal]
 groupe_verbal:: groupe_prepositionnel " " verbe " " groupe_nominal
