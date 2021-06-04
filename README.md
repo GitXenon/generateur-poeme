@@ -1,7 +1,7 @@
 # Générateur de poème
 [![Coverage Status](https://coveralls.io/repos/github/GitXenon/generateur-poeme/badge.svg?branch=main)](https://coveralls.io/github/GitXenon/generateur-poeme?branch=main)
 
-Une implémentation de Recursive Transition Networks en Python pour générer des (terribles) poèmes. Pour l'instant il reste beaucoup de travail. Les phrases ont pour comme structure:
+Une implémentation d'une grammaire non contextuelle en Python pour générer des (terribles) poèmes. Pour l'instant il reste beaucoup de travail. Les phrases ont pour comme structure:
 ```
 phrase::  [groupe_verbal | groupe_nominal]
 groupe_verbal:: groupe_prepositionnel " " verbe " " groupe_nominal
