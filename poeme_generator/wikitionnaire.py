@@ -193,23 +193,12 @@ def existe_dans_DB(mot, table):
         is_in_database (bool): true or false.
     """
 
-    if table.name == "nom":
-        Nom = Query()
-        search_ms = table.search(Nom.mot == mot)
-        if len(search_ms) != 0:
-            is_in_database = True
-        else:
-            is_in_database = False
+    query_category = Query()
+    search_mot = table.search(query_category.mot == mot)
+    if len(search_mot) != 0:
+        is_in_database = True
     else:
-        Nom = Query()
-        search_ms = table.search(Nom.ms.mot == mot)
-        search_mp = table.search(Nom.mp.mot == mot)
-        search_fs = table.search(Nom.fs.mot == mot)
-        search_fp = table.search(Nom.fp.mot == mot)
-        if (len(search_ms) or len(search_mp) or len(search_fs) or len(search_fp)) != 0:
-            is_in_database = True
-        else:
-            is_in_database = False
+        is_in_database = False
 
     return is_in_database
 
@@ -236,22 +225,11 @@ def ajouter_dans_DB(mot_a_ajouter, categorie_mot, db=None):
         logging.info(mot_a_ajouter + " est déjà dans la base de donnée !")
     else:
         logging.info("Ajout de " + mot_a_ajouter + " en cours...")
-
-        if categorie_mot == "nom":
-            dict_a_ajouter = recup_nom(mot_a_ajouter)
-        elif categorie_mot == "determinant":
-            dict_a_ajouter = recup_determinant(mot_a_ajouter)
-        elif categorie_mot == "adjectif":
-            dict_a_ajouter = recup_adjectif(mot_a_ajouter)
+        dict_a_ajouter = recup_mot(mot_a_ajouter, categorie_mot)
         if dict_a_ajouter is not None:
-            if categorie_mot == "nom":
-                for dict_nom in dict_a_ajouter:
-                    Table_categorie.insert(dict_nom)
-                    logging.info(dict_nom["mot"] + " ajouté!")
-            else:
-                Table_categorie.insert(dict_a_ajouter)
-                logging.info(mot_a_ajouter + " ajouté!")
-
+            for dict_nom in dict_a_ajouter:
+                Table_categorie.insert(dict_nom)
+                logging.info(dict_nom["mot"] + " ajouté!")
     db.close()
 
 

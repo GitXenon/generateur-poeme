@@ -63,34 +63,34 @@ def groupe_nominal_adjectif(dict_determinant, dict_nom, dict_adjectif):
     return groupe_nominal
 
 
-def groupe_verbal():
-    """Création d'un groupe verbal
+# def groupe_verbal():
+#     """Création d'un groupe verbal
 
-    Returns:
-        un groupe verbal
-    """
-    noyau = random.choice(liste_verbe)
-    pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
+#     Returns:
+#         un groupe verbal
+#     """
+#     noyau = random.choice(liste_verbe)
+#     pronom = random.choice(["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"])
 
-    groupe_verbal = "{} {} {}".format(pronom, groupe_pronom(), noyau)
-    return groupe_verbal
+#     groupe_verbal = "{} {} {}".format(pronom, groupe_pronom(), noyau)
+#     return groupe_verbal
 
 
-def groupe_verbal_avec_preposition(Gn=None):
-    """Création d'un groupe verbal avec expansion prepositionnel
+# def groupe_verbal_avec_preposition(Gn=None):
+#     """Création d'un groupe verbal avec expansion prepositionnel
 
-    Returns:
-        un groupe verbal + Gprep
-    """
-    noyau = random.choice(liste_verbe)
-    Gprep = groupe_prepositionnel()
-    if Gn is None:
-        Gn = groupe_nominal()
-    else:
-        Gn = groupe_nominal(Gn)
-    groupe_verbal = "{} {} {}".format(Gprep, noyau, Gn)
-    groupe_verbal = groupe_verbal.capitalize()
-    return groupe_verbal
+#     Returns:
+#         un groupe verbal + Gprep
+#     """
+#     noyau = random.choice(liste_verbe)
+#     Gprep = groupe_prepositionnel()
+#     if Gn is None:
+#         Gn = groupe_nominal()
+#     else:
+#         Gn = groupe_nominal(Gn)
+#     groupe_verbal = "{} {} {}".format(Gprep, noyau, Gn)
+#     groupe_verbal = groupe_verbal.capitalize()
+#     return groupe_verbal
 
 
 def groupe_pronom():
@@ -104,16 +104,16 @@ def groupe_pronom():
     return groupe_pronom
 
 
-def groupe_prepositionnel():
-    """Création d'un groupe prepositionnel
+# def groupe_prepositionnel():
+#     """Création d'un groupe prepositionnel
 
-    Returns:
-        Un groupe prépositionnel avec son expansion groupe du nom.
-    """
-    preposition = random.choice(liste_preposition)
-    gn = groupe_nominal()
-    groupe_prepositionnel = "{} {}".format(preposition, gn)
-    return groupe_prepositionnel
+#     Returns:
+#         Un groupe prépositionnel avec son expansion groupe du nom.
+#     """
+#     preposition = random.choice(liste_preposition)
+#     gn = groupe_nominal()
+#     groupe_prepositionnel = "{} {}".format(preposition, gn)
+#     return groupe_prepositionnel
 
 
 def verifier_mot_debute_voyelle(nom, determinant):
