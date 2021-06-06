@@ -3,7 +3,7 @@
     <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
     <br />
     <br />
-    <i>Une tentative d'un système automatisé pour générer des poèmes à l'aide d'un réseau de transition récursif</i>
+    <i>Une implémentation d'une grammaire non contextuelle en Python pour générer des poèmes</i>
     <br />
 <br />
     <i><b>Auteur</b>:
