@@ -15,6 +15,7 @@
 <br/>
 </p>
 <hr/>
+
  Les phrases ont pour comme structure:
 ```
 phrase::  [groupe_verbal | groupe_nominal]
@@ -32,7 +33,9 @@ adjectif::"énumérateur"
          |...
 ...
 ```
+
 Quelques fonctions sont implémentés pour l'instant, comme générer un poème avec une structure de rime AABB ou ABAB ou ABBA.
+
 ```python
 >>> python main.py
 l'abime
@@ -40,7 +43,6 @@ ton cybercrime
 un français
 une plaie
 ```
-
 J'ai aperçu rapidement qu'un des problèmes du projet est le manque de vocabulaire, ainsi que la possibilité d'avoir plusieurs caractéristiques des mots pour former des poèmes très complexes. Évidemment, il n'existe pas de dictionnaire en ligne assez sophistiqué pour mes besoins, je récupère donc les informations nécessaires sur wikitionnaire et j'ai quelques fonctions qui ajoutent des informations supplémentaires. Aussi, j'ai ajouté des fonctions tests, car le projet a pris une plus grosse tournure que j'avais initialement planifié.
 
 ### Et dans le futur ?
