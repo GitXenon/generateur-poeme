@@ -22,6 +22,8 @@ def retourner_mot(categorie):
         regex = r"^([a-z]+\b\s*)+ RB$"
     if categorie == "vb":
         regex = r"^([a-z]+\b\s*)+ VB$"
+    if categorie == "pr":
+        regex = r"^([a-z]+\b\s*)+ IN$"
 
     lexicon = open("fr-lexicon.txt", encoding="UTF-8")
     lexicon_text = lexicon.read()
@@ -46,8 +48,9 @@ def genere_grammaire():
 
     while not symbole_non_terminal.islower():
         remplacement_S = ["GN", "GV"]
-        remplacement_GN = ["pn", "dtnn", "GNGN"]
-        remplacement_GV = ["GNvb", "pnvb", "dtnnvb", "GVGN", "GVpn"]
+        remplacement_GN = ["_pn", "_dt_nn", "GNGN", "GNGPR"]
+        remplacement_GV = ["GN_vb", "_pn_vb", "_dt_nn_vb", "GVGN", "GV_pn", "GVGPR", "GPRGV"]
+        remplacement_GPR = ["_prGN", "_pr_pn"]
         while "S" in symbole_non_terminal:
             symbole_non_terminal = symbole_non_terminal.replace(
                 "S", random.choice(remplacement_S), 1
@@ -60,6 +63,10 @@ def genere_grammaire():
             symbole_non_terminal = symbole_non_terminal.replace(
                 "GV", random.choice(remplacement_GV), 1
             )
+        while "GPR" in symbole_non_terminal:
+            symbole_non_terminal = symbole_non_terminal.replace(
+                "GPR", random.choice(remplacement_GPR), 1
+            )
 
     return symbole_non_terminal
 
@@ -71,16 +78,18 @@ def categorie_lexical_vers_mots(chaine_lexical):
     Returns:
         phrase (str): une série de mots
     """
-    while "dt" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("dt", retourner_mot("det") + " ", 1)
-    while "pn" in chaine_lexical:
+    while "_dt" in chaine_lexical:
+        chaine_lexical = chaine_lexical.replace("_dt", retourner_mot("det") + " ", 1)
+    while "_pn" in chaine_lexical:
         chaine_lexical = chaine_lexical.replace(
-            "pn", retourner_mot("pron") + " ", 1
+            "_pn", retourner_mot("pron") + " ", 1
         )
-    while "nn" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("nn", retourner_mot("nom") + " ", 1)
-    while "vb" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("vb", retourner_mot("vb") + " ", 1)
+    while "_nn" in chaine_lexical:
+        chaine_lexical = chaine_lexical.replace("_nn", retourner_mot("nom") + " ", 1)
+    while "_vb" in chaine_lexical:
+        chaine_lexical = chaine_lexical.replace("_vb", retourner_mot("vb") + " ", 1)
+    while "_pr" in chaine_lexical:
+        chaine_lexical = chaine_lexical.replace("_pr", retourner_mot("pr") + " ", 1)
 
     phrase = chaine_lexical
     return phrase
