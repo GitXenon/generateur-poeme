@@ -13,6 +13,7 @@
 </p>
 <hr />
  Les phrases ont pour comme structure:
+ 
 ```
 phrase :=  [groupe_verbal | groupe_nominal]
 groupe_verbal := groupe_prepositionnel " " verbe " " groupe_nominal
