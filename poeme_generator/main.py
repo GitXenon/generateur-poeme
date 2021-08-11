@@ -40,6 +40,16 @@ def retourner_mot(categorie):
 
 def genere_grammaire():
     """On réitère jusqu'à temps que tous les groupes de mot soit transformé en categorie lexical
+        S: une phrase
+        GN: un groupe du nom
+        GV: un groupe verbal
+        GPR: un groupe pronominal
+        _dt: déterminant
+        _pn: pronom TODO
+        _nn: nom
+        _vb: verbe
+        _pr: pronom
+
 
     Returns:
         symbole_non_terminal (str): Une chaîne de catégories lexical
@@ -70,7 +80,7 @@ def genere_grammaire():
 
     return symbole_non_terminal
 
-def categorie_lexical_vers_mots(chaine_lexical):
+def chaine_lexical_vers_mots(chaine_lexical):
     """Remplace les symboles des catégories en un symbole terminal (un mot).
     
     Args:
@@ -100,18 +110,6 @@ if __name__ == "__main__":
     random.seed()
 
     chaine_terminaux = genere_grammaire()
-    phrase = categorie_lexical_vers_mots(chaine_terminaux)
+    phrase = chaine_lexical_vers_mots(chaine_terminaux)
 
-    print(phrase)
-    print(categorie_lexical_vers_mots(genere_grammaire()))
-    print(categorie_lexical_vers_mots(genere_grammaire()))
-    print(categorie_lexical_vers_mots(genere_grammaire()))
-    # resultat_det = retourner_mot("det")
-    # resultat_nom = retourner_mot("nom")
-    # resultat_adj = retourner_mot("adj")
-
-    # resultat_det = pluralize(resultat_det, custom=plural_determinant)
-    # resultat_nom = pluralize(resultat_nom)
-    # resultat_adj = pluralize(resultat_adj)
-
-    # print("{} {} {}".format(resultat_det, resultat_nom, resultat_adj))
+    print(phrase.capitalize())
