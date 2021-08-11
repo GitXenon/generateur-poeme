@@ -16,9 +16,9 @@
  
 ```
 phrase :=  [groupe_verbal | groupe_nominal]
-groupe_verbal := groupe_prepositionnel " " verbe " " groupe_nominal
-groupe_nominal := determinant " " adjectif " " nom
-groupe_prepositionnel := preposition " " groupe_nominal
+groupe_verbal := [groupe_nominal " " verbe| groupe_verbal " " groupe_prepositionnel | ...]
+groupe_nominal := [pronom | determinant " " nom | groupe_nominal " " groupe_nominal | groupe_nominal " " groupe_prepositionnel]
+groupe_prepositionnel := [preposition " " groupe_nominal | preposition " " pronom]
 determinant :=  "le"
                 | "la"
                 | ...
