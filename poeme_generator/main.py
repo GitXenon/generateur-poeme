@@ -11,31 +11,31 @@ def retourner_mot(categorie):
         resultat_mot (str): une string contenant un mot
     """
     if categorie == "nom":
-        regex = r"^([a-z]+\b\s*)+ NN$"
+        regex = r"^([a-z]+\b\s*)+ (NN)$"
     if categorie == "det":
-        regex = r"^([a-z]+\b\s*)+ DT$"
+        regex = r"^([a-z]+\b\s*)+ (DT|IN)$"
     if categorie == "adj":
-        regex = r"^([a-z]+\b\s*)+ JJ$"
+        regex = r"^([a-z]+\b\s*)+ (JJ)$"
     if categorie == "pron":
-        regex = r"^([a-z]+\b\s*)+ PRP$"
+        regex = r"^([a-z]+\b\s*)+ (PRP)$"
     if categorie == "adv":
-        regex = r"^([a-z]+\b\s*)+ RB$"
+        regex = r"^([a-z]+\b\s*)+ (RB)$"
     if categorie == "vb":
-        regex = r"^([a-z]+\b\s*)+ VB$"
+        regex = r"^([a-z]+\b\s*)+ (VB)$"
     if categorie == "pr":
-        regex = r"^([a-z]+\b\s*)+ IN$"
+        regex = r"^([a-z]+\b\s*)+ (IN)$"
 
     lexicon = open("fr-lexicon.txt", encoding="UTF-8")
     lexicon_text = lexicon.read()
 
     list_mots = re.findall(regex, lexicon_text, re.MULTILINE)
     try:
-        resultat_mot = random.choice(list_mots)
+        tuple_resultat_mot = random.choice(list_mots)
     except IndexError:
         print(list_mots, categorie)
         quit()
 
-    return resultat_mot
+    return tuple_resultat_mot[0]
 
 
 def genere_grammaire():
@@ -100,6 +100,8 @@ def chaine_lexical_vers_mots(chaine_lexical):
         chaine_lexical = chaine_lexical.replace("_vb", retourner_mot("vb") + " ", 1)
     while "_pr" in chaine_lexical:
         chaine_lexical = chaine_lexical.replace("_pr", retourner_mot("pr") + " ", 1)
+    while "_adj" in chaine_lexical:
+        chaine_lexical = chaine_lexical.replace("_adj", retourner_mot("adj") + " ", 1)
 
     phrase = chaine_lexical
     return phrase
@@ -107,9 +109,38 @@ def chaine_lexical_vers_mots(chaine_lexical):
 
 if __name__ == "__main__":
     os.chdir("./poeme_generator")
-    random.seed()
+    print("""---------------------------------------                                   
+ ___ ___ ___ ___ ___ ___ ___ _____ ___ 
+| . | -_|   | . | . | . | -_|     | -_|
+|_  |___|_|_|___|  _|___|___|_|_|_|___|
+|___|           |_|                    
+---------------------------------------""")
+    print("Faites un choix parmis les options suivantes:")
+    print("1. Générer un poème randomisé\n2. Générer un poème à partir d'une structure déjà établis\n0. Quitter\n")
+    while True:
+        choix_utilisateur = input()
+        if choix_utilisateur == "0":
+            quit()
+        if choix_utilisateur == "1":
+            poeme = ""
+            for i in range(4):
+                random.seed()
+                symbole = genere_grammaire()
+                poeme_temp = chaine_lexical_vers_mots(symbole)
+                poeme_temp += "\n"
+                poeme += poeme_temp
+            print(poeme)
+        elif choix_utilisateur == "2":
+            random.seed()
+            liste_structure_poeme = ["_dt_nn", "_dt_nn_adj"]
+            chaine_lex = random.choice(liste_structure_poeme)
+            poeme = ""
+            for i in range(4):
+                poeme_temp = chaine_lexical_vers_mots(chaine_lex)
+                poeme_temp.capitalize()
+                poeme_temp += "\n"
+                poeme += poeme_temp
+            print(poeme.capitalize())
+        else:
+            print("Ceci n'est pas une option!")
 
-    chaine_terminaux = genere_grammaire()
-    phrase = chaine_lexical_vers_mots(chaine_terminaux)
-
-    print(phrase.capitalize())
