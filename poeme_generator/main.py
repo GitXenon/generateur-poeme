@@ -1,42 +1,41 @@
-import re, os, random
+import os, random
 
+def ouvrir_lexique():
+    # TODO : changer nom variable temp
+    lexique = open("Lexique383.tsv", encoding="UTF-8")
+    lexique_text = lexique.read()
+    temp = lexique_text.splitlines()
+    index = 0
+    while index < len(temp):
+        temp[index] = temp[index].split("\t")
+        index += 1
+    return temp
 
-def retourner_mot(categorie):
-    """Retourne un mot du lexique selon une catégorie donnée
-
-    Args:
-        categorie (str): La catégorie désirée du mot
-
-    Returns:
-        resultat_mot (str): une string contenant un mot
+def Retourner_Liste_Mot(cat_gram, genre, nombre):
+    """Retourne une liste avec la catégorie grammaticale donnée
     """
-    if categorie == "nom":
-        regex = r"^([a-z]+\b\s*)+ (NN)$"
-    if categorie == "det":
-        regex = r"^([a-z]+\b\s*)+ (DT|IN)$"
-    if categorie == "adj":
-        regex = r"^([a-z]+\b\s*)+ (JJ)$"
-    if categorie == "pron":
-        regex = r"^([a-z]+\b\s*)+ (PRP)$"
-    if categorie == "adv":
-        regex = r"^([a-z]+\b\s*)+ (RB)$"
-    if categorie == "vb":
-        regex = r"^([a-z]+\b\s*)+ (VB)$"
-    if categorie == "pr":
-        regex = r"^([a-z]+\b\s*)+ (IN)$"
+    liste_cgram = []
+    lexique = ouvrir_lexique()
+    for x in lexique:
+        if cat_gram in x[3]:
+            if x[4] == genre or x[4] == "":
+                if x[5] == nombre or x[5] == "":
+                    liste_cgram.append(x)
+    return liste_cgram
 
-    lexicon = open("fr-lexicon.txt", encoding="UTF-8")
-    lexicon_text = lexicon.read()
+def Retourner_Verbe(conjugaison):
+    liste_verbe = []
+    lexique = ouvrir_lexique()
+    for x in lexique:
+        if "VER" in x[3]:
+            if conjugaison in x[10]:
+                liste_verbe.append(x)
+    verbe = random.choice(liste_verbe)
+    return verbe[0]
 
-    list_mots = re.findall(regex, lexicon_text, re.MULTILINE)
-    try:
-        tuple_resultat_mot = random.choice(list_mots)
-    except IndexError:
-        print(list_mots, categorie)
-        quit()
-
-    return tuple_resultat_mot[0]
-
+def Retourner_Mot(liste_cgram):
+    random.seed()
+    return random.choice(liste_cgram)[0]
 
 def genere_grammaire():
     """On réitère jusqu'à temps que tous les groupes de mot soit transformé en categorie lexical
@@ -88,20 +87,41 @@ def chaine_lexical_vers_mots(chaine_lexical):
     Returns:
         phrase (str): une série de mots
     """
+    # On choisit un genre et un nombre au hasard
+    liste_genre = ["m", "f"]
+    liste_nombre = ["s", "p"]
+    random.seed()
+    genre = random.choice(liste_genre)
+    random.seed()
+    nombre = random.choice(liste_nombre)
+    print(genre, nombre)
+
+    liste_determinant = Retourner_Liste_Mot("ART", genre, nombre)
+    liste_nom = Retourner_Liste_Mot("NOM", genre, nombre)
+    liste_adjectif = Retourner_Liste_Mot("ADJ", genre, nombre)
+    liste_verbe = Retourner_Liste_Mot("VER", genre, nombre)
+    liste_pronom = Retourner_Liste_Mot("PRO", genre, nombre)
+
     while "_dt" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("_dt", retourner_mot("det") + " ", 1)
+        random.seed()
+        chaine_lexical = chaine_lexical.replace("_dt", Retourner_Mot(liste_determinant) + " ", 1)
     while "_pn" in chaine_lexical:
+        random.seed()
         chaine_lexical = chaine_lexical.replace(
-            "_pn", retourner_mot("pron") + " ", 1
+            "_pn", Retourner_Mot(liste_determinant) + " ", 1
         )
     while "_nn" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("_nn", retourner_mot("nom") + " ", 1)
+        random.seed()
+        chaine_lexical = chaine_lexical.replace("_nn", Retourner_Mot(liste_nom) + " ", 1)
     while "_vb" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("_vb", retourner_mot("vb") + " ", 1)
+        random.seed()
+        chaine_lexical = chaine_lexical.replace("_vb", Retourner_Mot(liste_verbe) + " ", 1)
     while "_pr" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("_pr", retourner_mot("pr") + " ", 1)
+        random.seed()
+        chaine_lexical = chaine_lexical.replace("_pr", Retourner_Mot(liste_pronom) + " ", 1)
     while "_adj" in chaine_lexical:
-        chaine_lexical = chaine_lexical.replace("_adj", retourner_mot("adj") + " ", 1)
+        random.seed()
+        chaine_lexical = chaine_lexical.replace("_adj", Retourner_Mot(liste_adjectif) + " ", 1)
 
     phrase = chaine_lexical
     return phrase
@@ -116,7 +136,7 @@ if __name__ == "__main__":
 |___|           |_|                    
 ---------------------------------------""")
     print("Faites un choix parmis les options suivantes:")
-    print("1. Générer un poème randomisé\n2. Générer un poème à partir d'une structure déjà établis\n0. Quitter\n")
+    print("1. Générer un poème randomisé\n2. Générer un poème à partir d'une structure déjà établis\n3. Fill-in the blank\n0. Quitter\n")
     while True:
         choix_utilisateur = input()
         if choix_utilisateur == "0":
@@ -141,6 +161,24 @@ if __name__ == "__main__":
                 poeme_temp += "\n"
                 poeme += poeme_temp
             print(poeme.capitalize())
+        elif choix_utilisateur == "3":
+            print("Je vais essayer de décrire,\nCe cadeau ", end="")
+            liste_adjectif_masculin_singulier = Retourner_Liste_Mot("ADJ", "m", "s")
+            liste_adjectif_feminin_singulier = Retourner_Liste_Mot("ADJ", "f", "s")
+            print(Retourner_Mot(liste_adjectif_masculin_singulier), end="")
+            liste_nom_masculin_singulier = Retourner_Liste_Mot("NOM", "m", "s")
+            liste_nom_feminin_singulier = Retourner_Liste_Mot("NOM", "f", "s")
+            liste_nom_feminin_pluriel = Retourner_Liste_Mot("NOM", "f", "p")
+            print(", ce " + Retourner_Mot(liste_nom_masculin_singulier) + ".")
+            print("💛")
+            print("C'est une " + Retourner_Mot(liste_nom_feminin_singulier) + ", un "+ Retourner_Mot(liste_nom_masculin_singulier) + " " +Retourner_Mot(liste_adjectif_masculin_singulier))
+            print(Retourner_Verbe("inf") + " et " + Retourner_Verbe("inf") + " tour à tour.\n💛")
+            print("Se " + Retourner_Verbe("inf") + " et "+ Retourner_Verbe("inf") +" et " + Retourner_Verbe("inf"))
+            print("Et avoir de la "+Retourner_Mot(liste_nom_feminin_singulier)+". c'est " + Retourner_Verbe("inf")+".\n💛")
+            print("C'est un ensemble de "+ Retourner_Mot(liste_nom_masculin_singulier)+" et de " + Retourner_Mot(liste_nom_masculin_singulier))
+            print("C'est le battement du "+Retourner_Mot(liste_nom_masculin_singulier)+" dans la "+Retourner_Mot(liste_nom_feminin_singulier)+".\n💛")
+            print("Un "+Retourner_Mot(liste_adjectif_masculin_singulier)+ " " + Retourner_Mot(liste_nom_masculin_singulier)+", et des " + Retourner_Mot(liste_nom_feminin_pluriel))
+            print("Un "+Retourner_Mot(liste_nom_masculin_singulier)+", et une "+Retourner_Mot(liste_adjectif_feminin_singulier) +" "+ Retourner_Mot(liste_nom_feminin_singulier)+".")
         else:
             print("Ceci n'est pas une option!")
 
