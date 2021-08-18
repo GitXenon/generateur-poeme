@@ -14,17 +14,22 @@ def ouvrir_lexique():
     return liste_lexique
 
 
-def retourner_liste_mots(cat_gram, genre, nombre, syllabes=None):
+def retourner_liste_mots(cat_gram, genre, nombre):
     """Retourne une liste avec la catégorie grammaticale donnée, ainsi que le genre et le nombre"""
     nouveau_lexique = []
     lexique = ouvrir_lexique()
     for x in lexique:
-        if syllabes == None:
-            if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == ""):
-                nouveau_lexique.append(x)
-        else:
-            if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == "") and (x[23] == syllabes):
-                nouveau_lexique.append(x)
+        if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == ""):
+            nouveau_lexique.append(x)
+    return nouveau_lexique
+
+def retourner_liste_mots(cat_gram, genre, nombre, syllabes):
+    """Retourne une liste avec la catégorie grammaticale donnée, ainsi que le genre et le nombre"""
+    nouveau_lexique = []
+    lexique = ouvrir_lexique()
+    for x in lexique:
+        if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == "") and (int(x[23]) == syllabes):
+            nouveau_lexique.append(x)
     return nouveau_lexique
 
 
@@ -38,12 +43,30 @@ def retourner_verbe(conjugaison):
     verbe = random.choice(nouveau_lexique)
     return verbe[0]
 
+def retourner_verbe(conjugaison, syllabes):
+    """Retourne un verbe au hasard avec la conjugaison désirée"""
+    nouveau_lexique = []
+    lexique = ouvrir_lexique()
+    for x in lexique:
+        if "VER" in x[3] and conjugaison in x[10] and int(x[23]) == syllabes:
+            nouveau_lexique.append(x)
+    verbe = random.choice(nouveau_lexique)
+    return verbe[0]
+
 
 def retourner_mot(lexique):
     """Retourne un mot au hasard selon un lexique donnée"""
     random.seed()
     return random.choice(lexique)[0]
 
+def retourner_mot(cat_gram, genre, nombre, syllabes):
+    liste_mots = retourner_liste_mots(cat_gram, genre, nombre, syllabes)
+    random.seed()
+    try:
+        return random.choice(liste_mots)[0]
+    except IndexError:
+        print("Impossible de trouver un mot!")
+        return ""
 
 def genere_grammaire():
     """On réitère jusqu'à temps que tous les groupes de mot soit transformé en categorie lexical
@@ -271,9 +294,22 @@ if __name__ == "__main__":
                 + "."
             )
         elif choix_utilisateur == "4":
-            liste_nb_syllabes_1 = constrained_sum_sample_pos(3,5)
-            liste_nb_syllabes_2 = constrained_sum_sample_pos(3,7)
-            liste_nb_syllabes_3 = constrained_sum_sample_pos(3,5)
+            liste_nb_syllabes_1 = constrained_sum_sample_pos(2,4)
+            liste_nb_syllabes_2 = constrained_sum_sample_pos(2,5)
+            print(liste_nb_syllabes_1, liste_nb_syllabes_2)
+            print("Un " +
+                retourner_mot("ADJ", "m", "s", liste_nb_syllabes_1[0]) +
+                " " +
+                retourner_mot("NOM", "m", "s", liste_nb_syllabes_1[1])
+            )
+            print("Une " +
+                retourner_mot("NOM", "f", "s", liste_nb_syllabes_2[0]) +
+                " qui " +
+                retourner_verbe("ind:pre:1s", liste_nb_syllabes_2[1])
+            )
+            print("Le " +
+                retourner_mot("NOM", "m", "s", 4)
+            )
             
         else:
             print("Ceci n'est pas une option!")
