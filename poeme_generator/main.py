@@ -14,34 +14,35 @@ def ouvrir_lexique():
     return liste_lexique
 
 
-def retourner_liste_mots(cat_gram, genre, nombre):
+def retourner_liste_mots(cat_gram, genre, nombre, syllabes=None):
     """Retourne une liste avec la catégorie grammaticale donnée, ainsi que le genre et le nombre"""
-    liste_cgram = []
+    nouveau_lexique = []
     lexique = ouvrir_lexique()
     for x in lexique:
-        if cat_gram in x[3]:
-            if x[4] == genre or x[4] == "":
-                if x[5] == nombre or x[5] == "":
-                    liste_cgram.append(x)
-    return liste_cgram
+        if syllabes == None:
+            if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == ""):
+                nouveau_lexique.append(x)
+        else:
+            if (cat_gram in x[3]) and (x[4] == genre or x[4] == "") and (x[5] == nombre or x[5] == "") and (x[23] == syllabes):
+                nouveau_lexique.append(x)
+    return nouveau_lexique
 
 
 def retourner_verbe(conjugaison):
     """Retourne un verbe au hasard avec la conjugaison désirée"""
-    liste_verbe = []
+    nouveau_lexique = []
     lexique = ouvrir_lexique()
     for x in lexique:
-        if "VER" in x[3]:
-            if conjugaison in x[10]:
-                liste_verbe.append(x)
-    verbe = random.choice(liste_verbe)
+        if "VER" in x[3] and conjugaison in x[10]:
+            nouveau_lexique.append(x)
+    verbe = random.choice(nouveau_lexique)
     return verbe[0]
 
 
-def retourner_mot(liste_cgram):
-    """Retourne un mot au hasard selon une liste donnée"""
+def retourner_mot(lexique):
+    """Retourne un mot au hasard selon un lexique donnée"""
     random.seed()
-    return random.choice(liste_cgram)[0]
+    return random.choice(lexique)[0]
 
 
 def genere_grammaire():
@@ -152,6 +153,12 @@ def chaine_lexical_vers_mots(chaine_lexical):
     phrase = chaine_lexical
     return phrase
 
+def constrained_sum_sample_pos(n, total):
+    """Return a randomly chosen list of n positive integers summing to total.
+    Each such list is equally likely to occur."""
+
+    dividers = sorted(random.sample(range(1, total), n - 1))
+    return [a - b for a, b in zip(dividers + [total], [0] + dividers)]
 
 if __name__ == "__main__":
     os.chdir("./poeme_generator")
@@ -163,12 +170,15 @@ if __name__ == "__main__":
 |___|           |_|                    
 ---------------------------------------"""
     )
-    print("Faites un choix parmis les options suivantes:")
-    print(
-        "1. Générer un poème randomisé\n2. Générer un poème à partir d'une structure déjà établis\n3. Fill-in the blank\n0. Quitter\n"
+    print("Faites un choix parmis les options suivantes:\n" +
+        "1. Générer un poème randomisé\n" +
+        "2. Générer un poème à partir d'une structure déjà établis\n" +
+        "3. Fill-in the blank\n" +
+        "4. Haiku\n" +
+        "0. Quitter\n"
     )
     while True:
-        choix_utilisateur = input()
+        choix_utilisateur = input("Entrez votre choix : ")
         if choix_utilisateur == "0":
             quit()
         if choix_utilisateur == "1":
@@ -260,5 +270,10 @@ if __name__ == "__main__":
                 + retourner_mot(liste_nom_feminin_singulier)
                 + "."
             )
+        elif choix_utilisateur == "4":
+            liste_nb_syllabes_1 = constrained_sum_sample_pos(3,5)
+            liste_nb_syllabes_2 = constrained_sum_sample_pos(3,7)
+            liste_nb_syllabes_3 = constrained_sum_sample_pos(3,5)
+            
         else:
             print("Ceci n'est pas une option!")
