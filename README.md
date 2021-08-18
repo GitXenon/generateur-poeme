@@ -1,17 +1,21 @@
 <p align="center">
+    <img src="https://raw.githubusercontent.com/GitXenon/generateur-poeme/main/logo_poeme_generator.png">
+    <br/>
+    <br/>
     <a href="http://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/license-MIT-3C93B4.svg?style=flat" alt="MIT License"></a>
     <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
-    <br />
-    <br />
+    <br/>
+    <br/>
     <i>Une implémentation d'une grammaire non contextuelle en Python pour générer des poèmes</i>
-    <br />
-<br />
+    <br/>
+<br/>
     <i><b>Auteur</b>:
         <a href="https://github.com/GitXenon">Xavier B.</a>
     </i>
-<br />
+<br/>
 </p>
-<hr />
+<hr/>
+
  Les phrases ont pour comme structure:
  
 ```
@@ -31,7 +35,8 @@ adjectif :=     "énumérateur"
 ...
 ```
 
-La sémantique des phrases n'est pas tout à fait parfaite pour l'instant :
+
+
 ```python
 >>> python main.py
 Dans lui nulles explication attendis il certain
